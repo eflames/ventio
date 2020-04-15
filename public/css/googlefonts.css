@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'Muli';
+    font-style: normal;
+    font-weight: 300;
+    src: url('googlefonts/muli/Muli-Regular.eot'); /* IE9 Compat Modes */
+    src: url('googlefonts/muli/Muli-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('googlefonts/muli/Muli-Light.woff2') format('woff2'), /* Super Modern Browsers */
+        url('googlefonts/muli/Muli-Light.woff') format('woff'), /* Pretty Modern Browsers */
+        url('googlefonts/muli/Muli-Light.ttf')  format('truetype'), /* Safari, Android, iOS */
+        url('googlefonts/muli/Muli-Light.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: 'Muli';
+    font-style: normal;
+    font-weight: 400;
+    src: url('googlefonts/muli/Muli-Regular.eot'); /* IE9 Compat Modes */
+    src: url('googlefonts/muli/Muli-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('googlefonts/muli/Muli-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('googlefonts/muli/Muli-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+    url('googlefonts/muli/Muli-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('googlefonts/muli/Muli-Regular.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: 'Muli';
+    font-style: normal;
+    font-weight: 600;
+    src: url('googlefonts/muli/Muli-SemiBold.eot'); /* IE9 Compat Modes */
+    src: url('googlefonts/muli/Muli-SemiBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('googlefonts/muli/Muli-SemiBold.woff2') format('woff2'), /* Super Modern Browsers */
+    url('googlefonts/muli/Muli-SemiBold.woff') format('woff'), /* Pretty Modern Browsers */
+    url('googlefonts/muli/Muli-SemiBold.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('googlefonts/muli/Muli-SemiBold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: 'Muli';
+    font-style: normal;
+    font-weight: 700;
+    src: url('googlefonts/muli/Muli-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('googlefonts/muli/Muli-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+    url('googlefonts/muli/Muli-Bold.woff') format('woff'), /* Pretty Modern Browsers */
+    url('googlefonts/muli/Muli-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('googlefonts/muli/Muli-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+

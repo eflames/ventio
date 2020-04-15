@@ -1,0 +1,246 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\CSVRequest;
+use App\Http\Requests\StockRequest;
+use App\Libraries\CSVStockImporter;
+use App\Libraries\StockUtils;
+use App\Models\Product;
+use App\Models\Stock;
+use App\Models\StockLog;
+use App\Models\Warehouse;
+use App\Traits\SEO;
+use App\User;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+
+class StockController extends Controller
+{
+    use SEO;
+
+    public function index(){
+        try{
+            $this->authorize('listInventory', User::class);
+            $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
+            $data['wares'] = Warehouse::orderBy('id','desc')->get();
+            $this->setSeo('Stock');
+            return view('modules.stock.list', $data);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function getStock()
+    {
+        try{
+            $this->authorize('sales', User::class);
+            $stock = DB::table('stock')
+                ->join('products', 'stock.product_id', '=', 'products.id')
+                ->join('warehouses', 'stock.warehouse_id', '=', 'warehouses.id')
+                ->select('stock.id', 'products.identifier', 'products.name','stock.qty', 'warehouses.name as warehouse',
+                    'stock.price as price', 'stock.cost_price', 'warehouses.id as warehouseid', 'products.id as productid')
+                ->orderBy('stock.id', 'desc')
+                ->get();
+
+
+            return DataTables::of($stock)
+                ->setRowAttr(['align' => 'center'])
+                ->addColumn('actions', 'modules.stock.partials.actionButtons')
+                ->editColumn('qty', function($stock) {return $stock->qty > 0 ? '<div class="badge badge-success"><strong>'. $stock->qty . '</strong></div>' : '<div class="badge badge-warning"><strong>'. $stock->qty . '</strong></div>' ;})
+                ->editColumn('price', function($stock) {return '$'.number_format($stock->price, 2) ;})
+                ->editColumn('cost_price', function($stock) {return '$'.number_format($stock->cost_price, 2) ;})
+                ->editColumn('name', function($stock) {return '<strong>' . strtoupper($stock->name) .'</strong>' ;})
+                ->rawColumns(['actions', 'qty', 'name'])
+                ->make(true);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function showLog(){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $data['logs'] = StockLog::orderBy('id', 'desc')->get();
+            $this->setSeo('Stock');
+            return view('modules.stock.log', $data);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function filteredList($slug){
+        try{
+            $this->authorize('listInventory', User::class);
+            $warehouse = Warehouse::where('slug', $slug)->first();
+            $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
+            $data['wares'] = Warehouse::orderBy('id','desc')->get();
+            $data['stock'] = Stock::orderBy('product_id','desc')->where('warehouse_id', $warehouse->id)->with('product')->get();
+            $data['filter'] = $warehouse->name;
+            $data['filterSlug'] = $warehouse->slug;
+            $this->setSeo('Stock');
+            return view('modules.stock.listFiltered', $data);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function store(StockRequest $request){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $check = Stock::where('product_id', $request->product_id)
+                ->where('price', $request->price)
+                ->where('cost_price', $request->cost_price)
+                ->where('warehouse_id', $request->warehouse_id)->first();
+            if ($check){
+                $stock = $check;
+            }else{
+                $stock = new Stock();
+                $stock->price = $request->price;
+                $stock->cost_price = $request->cost_price;
+                $stock->warehouse_id = $request->warehouse_id;
+                $stock->product_id = $request->product_id;
+            }
+            $stock->created_by = Auth::id();
+            $stock->qty += $request->qty;
+            $stock->save();
+            $product = Product::find($request->product_id);
+            $warehouse = Warehouse::find($request->warehouse_id);
+            StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
+            $msg = 'Se ha agregado un nuevo stock para <strong>'.$product->name. '</strong> en el almacén <strong>'.$warehouse->name.'</strong>';
+            $request->session()->flash('message', $msg);
+            return redirect('stock');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function editPrice(Request $request){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $stock = Stock::find($request->stock_id);
+            $stock->price = $request->price;
+            $stock->cost_price = $request->cost_price;
+            $stock->save();
+            $request->session()->flash('message', "Precio de <strong>".$request->name."</strong> actualizado exitosamente");
+            return redirect('stock');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function addQty(Request $request){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $stock = Stock::find($request->stock_id);
+            $stock->qty += $request->qty;
+            $stock->save();
+            StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
+            $request->session()->flash('message', $request->qty." unidades añadidas para <strong>".$request->name."</strong> exitosamente");
+            return redirect('stock');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function transfer(Request $request){
+        try{
+            $this->authorize('manageInventory', User::class);
+            if ($request->from_warehouse_id == $request->warehouse_id){
+            $request->session()->flash('error', 'No puede transferir stock a un mismo almacén.');
+            return redirect('stock');
+        }
+            $oldStock = Stock::find($request->stock_id);
+            $check = Stock::where('product_id', $request->product_id)
+                ->where('price', $oldStock->price)
+                ->where('cost_price', $oldStock->cost_price)
+                ->where('warehouse_id', $request->warehouse_id)->first();
+            if ($check){
+                $stock = $check;
+            }else{
+                $stock = new Stock();
+                $stock->price = $oldStock->price;
+                $stock->cost_price = $oldStock->cost_price;
+                $stock->warehouse_id = $request->warehouse_id;
+                $stock->product_id = $request->product_id;
+                $stock->created_by = Auth::id();
+            }
+            $stock->qty += $request->qty;
+            $oldStock->qty -= $request->qty;
+            $oldStock->save();
+            $stock->save();
+            $warehouse = Warehouse::find($request->warehouse_id);
+            $msg = '<strong>'.$request->qty.'</strong> unidades transferidas de: <strong>'.strtoupper($request->name).'</strong> desde <strong> '.$request->warehousename.' </strong>hacia<strong> '.strtoupper($warehouse->name).'</strong>';
+            $request->session()->flash('message', $msg);
+            return redirect('stock');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+
+    public function importCSV(CSVRequest $request, CSVStockImporter $importer){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $file = $request->csvfile;
+            $proc = $importer->importProducts($file);
+
+            if(!$proc){
+                $msg = 'Ocurrió un problema con el archivo, chequea que mantenga el formato y/o no contenga carácteres especiales';
+                return redirect('stock')->with('error', $msg);
+            }
+
+            $result = $importer->result();
+            $request->session()->flash('message', "Archivo importado - <a data-toggle='modal' data-target='#logModal'><strong>VER LOG</strong></a>");
+            $request->session()->flash('results', $result);
+            return redirect('stock');
+
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function destroy($id, Request $request){
+        try{
+            $this->authorize('manageInventory', User::class);
+            $data = Stock::findOrFail($id);
+            StockUtils::log($data->product_id, 'Eliminó el item del almacén: <strong>'.$data->warehouse->name.' (quedaban: '.$data->qty.')</strong> unidades');
+            if($data->delete()) {
+                $request->session()->flash('message','Stock eliminado :\'(');
+            }else{
+                $request->session()->flash('error','Ha ocurrido un error inesperado, por favor contacte a los 
+                administradores del sistema.');
+            }
+            return redirect('stock');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function downloadStock(){
+        try{
+            $this->authorize('listInventory', User::class);
+            $data['details'] = Stock::with('product')->get()->sortBy('product.name');
+            $pdf = PDF::loadView('modules.stock.stockReport', $data)->setPaper('letter');
+            return $pdf->download('Reporte - stock - '.date('dmY').'.pdf');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function downloadFilteredStock($slug){
+        try{
+            $this->authorize('listInventory', User::class);
+            $warehouseId = Warehouse::where('slug', $slug)->pluck('id')->first();
+            $data['details'] = Stock::where('warehouse_id', $warehouseId)->with('product')->get()->sortBy('product.name');
+            $pdf = PDF::loadView('modules.stock.stockReport', $data)->setPaper('letter');
+            return $pdf->download('Reporte - stock - '.date('dmY').'.pdf');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+}

@@ -1,0 +1,10 @@
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Atomizadores', 'atomizadores', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Mods electrónicos', 'mods-electronicos', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Mods mecánicos', 'mods-mecanicos', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Baterías', 'baterias', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Líquidos Importados', 'liquidos-importados', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Líquidos Nacionales', 'liquidos-nacionales', 1);
+INSERT into product_categories(`name`, `slug`, `created_by`) VALUES ('Accesorios', 'accesorios', 1);
+INSERT into warehouses(`name`, `slug`, `is_default`, `created_by`) VALUES ('Tienda', 'tienda', 1, 1);
+INSERT into warehouses(`name`, `slug`, `created_by`) VALUES ('Casa', 'casa', 1);
+INSERT into clients(`name`, `id_number`, `telephone`, `created_by`) VALUES ('Ernesto Flames', 17855837, '04142334943', 1);
