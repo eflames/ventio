@@ -28,6 +28,9 @@ More info in my website: http://www.ernestoflames.com
 
 ## Screenshots
 
+<p align="center"><img src="https://i.postimg.cc/bw6gyf0C/Annotation-2020-05-04-011037.png" width="500"></p>
+<p align="center">Login screen</p>
+<hr>
 <p align="center"><img src="https://i.postimg.cc/c6q033BC/Annotation-2020-05-04-004307.png" width="500"></p>
 <p align="center">Main screen</p>
 <hr>
