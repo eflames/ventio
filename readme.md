@@ -26,7 +26,7 @@ Ventio is based on Laravel Framework and is part of the Grupo Tera products (My 
 
 More info in my website: http://www.ernestoflames.com
 
-## Screenshots
+## Some screenshots
 
 <p align="center"><img src="https://i.postimg.cc/bw6gyf0C/Annotation-2020-05-04-011037.png" width="500"></p>
 <p align="center">Login screen</p>
