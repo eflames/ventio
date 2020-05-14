@@ -6,13 +6,13 @@
  * Time: 11:55 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="importModal" role="dialog" aria-labelledby="importModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="importModal" role="dialog" aria-labelledby="importModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-light-green">
-                <label class="modal-title text-text-bold-600" id="importModal"><h3 class="text-white">Importar stock en lote</h3></label>
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" id="importModal"><h3 class="mb-0">Importar stock en lote</h3></label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             {{ Form::open(['url' => 'stock/csv-import', 'method' => 'post', 'enctype' => 'multipart/form-data']) }}

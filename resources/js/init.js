@@ -24,6 +24,33 @@ function alertElim(id) {
             }
         })
 }
+
+function alertMaintenance() {
+    swal({
+            title: "¿Está seguro de realizar un borrado masivo?",
+            text: "Está a punto de borrar todas las cuentas por cobrar y por pagar en estatus cerrado y cancelado, esto ayudará al rendimiento de la aplicación pero no podrá recuperar esos datos.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#DA4453',
+            confirmButtonText: "Si, Borrar",
+            cancelButtonText: "No",
+            closeOnConfirm: true,
+            closeOnCancel: false
+        },
+        function(isConfirm){
+            if (isConfirm) {
+                $('#maintenance').submit();
+            } else {
+                swal({
+                    title: "Cancelado",
+                    text: "¡UFF! Menos mal que existe esto.",
+                    type: "success",
+                    confirmButtonText: "Lo sabemos :)"
+                });
+                //swal("Cancelado", "¡UFF! Menos mal que existe esto.", "success","asdasd");
+            }
+        })
+}
 function procSale() {
     swal({
             title: "¿Está seguro que desea procesar la venta?",
@@ -99,39 +126,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#datatable-spanish-sales-dt").DataTable({
-        processing: true,
-        serverSide: true,
-        // responsive: true,
-        "ordering": false,
-        ajax: '/ventas-dt',
-        // "aaSorting": [[6, "desc"]],
-        columns: [
-            { data: 'id', name: 'id', className: 'align-middle'},
-            { data: 'client', name: 'client', className: 'align-middle' },
-            { data: 'closed_at', name: 'closed_at', className: 'align-middle' },
-            { data: 'qty', name: 'qty', className: 'align-middle' },
-            { data: 'amount', name: 'amount', className: 'align-middle' },
-            { data: 'status', name: 'status', className: 'align-middle' },
-            { data: 'actions', name: 'actions', className: 'align-middle' },
-        ],
-        language: {
-            lengthMenu: "Mostrar _MENU_ registros por página",
-            zeroRecords: "No hay resultados",
-            info: "Mostrando página _PAGE_ de _PAGES_",
-            infoEmpty: "No hay resultados",
-            infoFiltered: "(Filtrando de _MAX_ registros totales)",
-            search: "Buscar:",
-            processing: "Procesando data...",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: "Siguiente",
-                previous: "Anterior"
-            },
-        }
-    });
-
+});
     $("#datatable-spanish-products-dt").DataTable({
         processing: true,
         serverSide: true,
@@ -162,20 +157,18 @@ $(document).ready(function() {
         }
     });
 
-    $("#datatable-spanish-stock-dt").DataTable({
+    $("#datatable-spanish-clients").DataTable({
         processing: true,
         serverSide: true,
         // responsive: true,
         "ordering": false,
-        ajax: '/stock-dt',
+        ajax: '/clients-dt',
         // "aaSorting": [[6, "desc"]],
         columns: [
-            { data: 'identifier', name: 'identifier', className: 'align-middle'},
-            { data: 'name', name: 'name', className: 'align-middle' },
-            { data: 'qty', name: 'qty', className: 'align-middle' },
-            { data: 'warehouse', name: 'warehouse', className: 'align-middle' },
-            { data: 'price', name: 'price', className: 'align-middle' },
-            { data: 'cost_price', name: 'cost_price', className: 'align-middle' },
+            { data: 'name', name: 'name', className: 'align-middle'},
+            { data: 'id_number', name: 'id_number', className: 'align-middle' },
+            { data: 'telephone', name: 'telephone', className: 'align-middle' },
+            { data: 'email', name: 'email', className: 'align-middle' },
             { data: 'actions', name: 'actions', className: 'align-middle' },
         ],
         language: {
@@ -194,7 +187,6 @@ $(document).ready(function() {
             },
         }
     });
-});
 
 $( "button, input[type='submit']" ).click(function(e){
     $(this).addClass('running').delay(1250).queue(function( next ){

@@ -135,6 +135,7 @@
 @section('after-scripts')
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
+        $('.config-modal').css("margin-top", $(window).height() / 4 - ($('.modal-content').height() / 2));
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {
@@ -142,6 +143,7 @@
         });
     </script>
     <script>
+        $('.modal-ware').css("margin-top", 55);
         $('#editWareModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

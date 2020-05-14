@@ -6,13 +6,13 @@
  * Time: 11:55 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="logModal" role="dialog" aria-labelledby="logModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="logModal" role="dialog" aria-labelledby="logModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-grey">
-                <label class="modal-title text-text-bold-600" id="logModal"><h3 class="text-white">Resultados de la importación (LOG)</h3></label>
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" id="logModal"><h3 class="mb-0">Resultados de la importación (LOG)</h3></label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="reset" class="btn btn-light-greenbtn-lg" data-dismiss="modal" value="Cerrar">
+                <input type="reset" class="btn btn-light-green btn-lg" data-dismiss="modal" value="Cerrar">
             </div>
         </div>
     </div>

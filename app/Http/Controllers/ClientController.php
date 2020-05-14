@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class ClientController extends Controller
 {
@@ -21,9 +23,7 @@ class ClientController extends Controller
     public function index(){
         try{
             $this->authorize('listClients', User::class);
-            $data['clients'] = Client::orderBy('id','desc')->get();
-            $this->setSeo('Clientes');
-            return view('modules.clients.list', $data);
+            return view('modules.clients.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -166,4 +166,27 @@ class ClientController extends Controller
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
+
+    public function getClients()
+    {
+        try{
+            $this->authorize('listClients', User::class);
+            $clients = DB::table('clients')
+            ->select('name', 'id_number', 'telephone', 'email', 'id')
+                ->orderBy('id', 'desc')
+                ->get();
+
+
+            return DataTables::of($clients)
+            ->setRowAttr(['align' => 'center'])
+                ->editColumn('name', function($clients) {return '<strong><a href="'.route('client.details', ['id_number' => $clients->id_number]).'">'.strtoupper($clients->name).'</a></strong>';})
+                ->addColumn('actions', 'modules.clients.partials.actionButtons')
+                ->rawColumns(['name', 'actions'])
+                ->make(true);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+
 }

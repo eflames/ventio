@@ -29,11 +29,16 @@ Route::group(['middleware' => ['auth','isActive']], function(){
         'index' => 'warehouses.index',
         'update' => 'warehouses.update'
     ]);
-    Route::resource('variables-de-configuracion', 'ConfigController')->names([
+    Route::resource('configuracion/avanzado', 'ConfigController')->names([
         'index' => 'config.index',
-        'update' => 'config.update',
         'store' => 'config.store'
     ]);
+    Route::post('configuracion/avanzado/update', 'ConfigController@update')->name('config.update');
+    Route::get('configuracion/general', 'ConfigController@general')->name('config.general');
+    Route::post('configuracion/general', 'ConfigController@setVar')->name('config.setVar');
+    Route::post('configuracion/set-store', 'ConfigController@setStore')->name('config.setStore');
+    Route::post('configuracion/set-image', 'ConfigController@setImage')->name('config.setImage');
+    Route::post('configuracion/maintenance', 'ConfigController@maintenance')->name('config.maintenance');
     Route::get('almacenes/default/{id}/{option}', 'WarehouseController@changeDefault')->name('warehouse.default');
     Route::resource('usuarios/permisos', 'RolController')->names([
         'index' => 'roles.list',
@@ -45,6 +50,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
         'create' => 'users.create',
         'edit' => 'users.edit'
         ]);
+    Route::get('clients-dt', 'ClientController@getClients');
     Route::post('clientes/fast', 'ClientController@fastStore');
     Route::get('cliente/{id_number}', 'ClientController@details')->name('client.details');
     Route::get('cliente/notificar/{id}', 'ClientController@notifyClient')->name('client.notify');
@@ -64,9 +70,11 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::post('stock/editPrice', 'StockController@editPrice');
     Route::post('stock/addQty', 'StockController@addQty');
     Route::post('stock/transfer', 'StockController@transfer');
+    Route::get('stock/minimo', 'StockController@listMinStock')->name('stock.listMinStock');
     Route::get('stock/descargar', 'StockController@downloadStock')->name('stock.report');
     Route::get('stock/descargar/{slug}', 'StockController@downloadFilteredStock')->name('stock.reportFiltered');
     Route::get('stock/log', 'StockController@showLog')->name('stock.log');
+    Route::post('stock/log/filtrado', 'StockController@showLogFiltered')->name('stock.filter');
     Route::resource('stock', 'StockController')->names([
         'index' => 'stock.list',
         'create' => 'stock.create',
@@ -75,7 +83,10 @@ Route::group(['middleware' => ['auth','isActive']], function(){
         'update' => 'stock.update',
         ]);
     Route::get('stock-dt', 'StockController@getStock');
-    Route::get('stock/almacen/{slug}', 'StockController@filteredList')->name('stock.filtered');
+    Route::get('stock-dt/{slug}', 'StockController@getStockFiltered');
+    Route::get('stock/almacen/{slug}', 'StockController@index')->name('stock.filtered');
+    Route::post('stock/min-stock', 'StockController@setMinStock')->name('stock.setMinStock');
+    Route::get('stock/min-stock/pdf', 'ReportController@generateMinStockPdf')->name('stock.generateMinStockPdf');
     Route::get('venta/{id}/edit', 'SaleController@sale')->name('sale.edit');
     Route::post('venta/delete/{id}', 'SaleController@deleteSale');
     Route::get('venta/{id}', 'SaleController@viewSale')->name('sale.view');
@@ -89,6 +100,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::post('venta/changeItemPriceFull', 'SaleController@changeItemPriceFull')->name('sale.changeItemPriceFull');
     Route::post('venta/returnItem', 'SaleController@returnItem')->name('sale.return');
     Route::get('ventas', 'SaleController@sales')->name('sales.list');
+    Route::get('ventas/cambiar-almacen/{id}', 'SaleController@changeDefault')->name('sales.changeDefault');
     Route::get('ventas-dt', 'SaleController@getSales')->name('sales.list-dt');
     Route::get('cuentas/por-pagar', 'DepositController@list')->name('credits.list');
     Route::post('cuentas/por-pagar', 'DepositController@create')->name('credits.create');
@@ -128,7 +140,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::post('reporte/comisiones', 'ReportController@generateByCommission')->name('report.byCommission');
     Route::post('reporte/categoria', 'ReportController@generateByCategory')->name('report.byCategory');
     Route::post('reporte/categoria-pdf', 'ReportController@generateByCategoryPdf')->name('report.byCategoryPdf');
-    Route::get('reporte/stock', 'ReportController@generateByStock')->name('report.byStock');
+    Route::post('reporte/stock', 'ReportController@generateByStock')->name('report.byStock');
     Route::get('reporte/stock-pdf', 'ReportController@generateByStockPdf')->name('report.byStockPdf');
     Route::post('reporte/devoluciones-pdf', 'ReportController@generateByReturnPdf')->name('report.byReturnPdf');
     Route::post('reporte/devoluciones', 'ReportController@generateByReturn')->name('report.byReturn');
@@ -136,6 +148,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::post('miperfil', 'HomeController@storeProfile')->name('profile.store');
     Route::get('sistema', 'SystemController@index')->name('system.index');
     Route::get('sistema/backup-db', 'SystemController@dbbackup')->name('system.db');
+    Route::get('acerca-de-ventio', 'HomeController@about')->name('system.about');
 
 
 });

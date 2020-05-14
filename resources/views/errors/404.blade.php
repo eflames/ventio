@@ -26,7 +26,7 @@
     <div class="container">
         <div class="row mt-5 mb-5">
             <div class="col-12 text-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo">
+                <img src="{{ asset('images/logo_ventio.png') }}" alt="Logo">
             </div>
         </div>
         <div class="row">

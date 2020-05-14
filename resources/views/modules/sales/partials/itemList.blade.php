@@ -47,7 +47,7 @@
                        data-item_name="{{ $detail->product->name }}"
                        data-item_price="{{ $detail->price }}"
                        data-toggle="modal" data-target="#changePriceModal"
-                       data-tooltip="tooltip" data-placement="right" title="Cambiar precio (requiere permiso)" class="btn btn-outline-grey btn-sm">
+                       data-tooltip="tooltip" data-placement="top" title="Cambiar precio (requiere permiso)" class="btn btn-outline-grey btn-sm">
                         <span class="fa fa-lock"></span>
                     </a>
                 @endcan

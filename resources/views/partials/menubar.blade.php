@@ -14,11 +14,11 @@
             @canany(['sales', 'sell'], \App\User::class)
                 <li class="dropdown nav-item @if(Request::is('venta*')) active @endif" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-basket-loaded"></i><span data-i18n="nav.templates.main">Ventas</span></a>
                     <ul class="dropdown-menu">
-                        @can('sell', \App\User::class)
-                            <li class="dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#newSaleModal" accesskey="n">Nueva venta</a></li>
-                        @endcan
                         @can('sales', \App\User::class)
                             <li class="dropdown @if(Request::is('ventas')) active @endif"><a class="dropdown-item" href="{{ route('sales.list') }}" accesskey="l" >Ventas registradas</a></li>
+                        @endcan
+                        @can('sell', \App\User::class)
+                            <li class="dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#newSaleModal" accesskey="n">Nueva venta</a></li>
                         @endcan
                     </ul>
                 </li>
@@ -61,13 +61,12 @@
                 </li>
             @endcan
             @can('config', \App\User::class)
-                <li class="dropdown nav-item @if(Request::is('categorias*') OR Request::is('almacenes*') OR Request::is('metodos-de-pago*')) active @endif" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-settings"></i><span data-i18n="nav.category.general">Configuración</span></a>
+                <li class="dropdown nav-item @if(Request::is('categorias*') OR Request::is('almacenes*') OR Request::is('metodos-de-pago*') OR Request::is('sistema*')) active @endif" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="icon-wrench"></i><span data-i18n="nav.category.general">Config</span></a>
                     <ul class="dropdown-menu">
+                        <li class="dropdown @if(Request::is('configuracion*')) active @endif"><a class="dropdown-item" href="{{ route('config.general') }}">Configuración general</a></li>
                         <li class="dropdown @if(Request::is('categorias*')) active @endif"><a class="dropdown-item" href="{{ route('categories.index') }}">Categorías de producto</a></li>
                         <li class="dropdown @if(Request::is('almacenes*')) active @endif"><a class="dropdown-item" href="{{ route('warehouses.index') }}">Administrar almacenes</a></li>
                         <li class="dropdown @if(Request::is('metodos-de-pago*')) active @endif"><a class="dropdown-item" href="{{ route('paymentMethods.index') }}">Métodos de pago</a></li>
-                        <li class="dropdown @if(Request::is('variables-de-configuracion*')) active @endif"><a class="dropdown-item" href="{{ route('config.index') }}">Variables de configuración</a></li>
-                        {{--<li class="dropdown @if(Request::is('sistema*')) active @endif"><a class="dropdown-item" href="{{ route('system.index') }}">Sistema</a></li>--}}
                     </ul>
                 </li>
             @endcan

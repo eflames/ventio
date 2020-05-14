@@ -29,22 +29,25 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card border-top-3 border-top-green">
+                        {{ Form::open(['url' => '/productos', 'method' => 'post']) }}
                         <div class="card-header">
                             <h4 class="card-title">Crear nuevo producto <small><span class="text-danger">*</span> son campos obligatorios</small></h4>
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    <div class="pb-1">
+                                        <input type="checkbox" class="js-switch" name="add_stock" value="1" @if (old('add_stock') == true) checked @endif  onchange="javascript:showStockFields()"/>
+                                        <label for="is_default" class="font-medium-1 text-bold-400 ml-1"><strong>Agregar stock</strong></label>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard">
-                                {{ Form::open(['url' => '/productos', 'method' => 'post']) }}
                                     @include('modules.products.partials._form')
-                                {{ Form::close() }}
+                                </div>
                             </div>
-                        </div>
+                            {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -53,8 +56,19 @@
 
 @stop
 @section('after-styles')
-
+    <link rel="stylesheet" href="{{ asset('css/switchery.min.css') }}">
 @stop
 @section('after-scripts')
+    <script src="{{ asset('js/switchery.min.js') }}"></script>
+    <script>
+        var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
+        elems.forEach(function(html) {
+            var switchery = new Switchery(html);
+        });
+        function showStockFields(){
+            $('#stockFields').toggle();
+        }
+    </script>
+    
 @stop

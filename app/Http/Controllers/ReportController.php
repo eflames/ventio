@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\DB;
+use App\Models\Warehouse;
 
 class ReportController extends Controller
 {
@@ -31,6 +32,7 @@ class ReportController extends Controller
             $this->setSeo('Reportes');
             $data['sellers'] = User::pluck('name', 'id');
             $data['categories'] = ProductCategory::pluck('name', 'id');
+            $data['warehouses'] = Warehouse::pluck('name', 'id');
             return view('modules.reports.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
@@ -50,11 +52,11 @@ class ReportController extends Controller
             if($request->created_by){
                 $data['sales'] = Sale::where('sale_status_id', 2)->where('created_by', $request->created_by)
                     ->with('details')->with('client')
-                    ->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')
+                    ->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')
                     ->get();
             }else{
                 $data['sales'] = Sale::where('sale_status_id', 2)->with('details')->with('client')
-                    ->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')
+                    ->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')
                     ->get();
             }
             return view('modules.reports.byDateEmbed',$data);
@@ -75,11 +77,11 @@ class ReportController extends Controller
             if($request->created_by){
                 $data['sales'] = Sale::where('sale_status_id', 2)->where('created_by', $request->created_by)
                     ->with('details')->with('client')
-                    ->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')
+                    ->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')
                     ->get();
             }else{
                 $data['sales'] = Sale::where('sale_status_id', 2)->with('details')->with('client')
-                    ->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')
+                    ->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')
                     ->get();
             }
             $pdf = PDF::loadView('modules.reports.templates.byDate', $data)->setPaper('letter', 'landscape');
@@ -102,7 +104,7 @@ class ReportController extends Controller
             $data['client_id'] = $request->client_id;
             $data['sales'] = Sale::where('sale_status_id', 2)->whereHas('client', function ($q) use ($request) {
                 $q->where('id', $request->client_id);
-            })->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
+            })->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
             $data['client'] = Client::findOrFail($request->client_id)->pluck('name')->first();
             return view('modules.reports.byClientEmbed',$data);
 
@@ -121,7 +123,7 @@ class ReportController extends Controller
             $data['date_to'] = $date_to;
             $data['sales'] = Sale::where('sale_status_id', 2)->whereHas('client', function ($q) use ($request) {
                 $q->where('id', $request->client_id);
-            })->whereBetween('updated_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
+            })->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
             $data['client'] = Client::findOrFail($request->client_id)->pluck('name')->first();
             $pdf = PDF::loadView('modules.reports.templates.byClient', $data);
             return $pdf->download('Reporte - Ventas por cliente - '.date('dmY').'.pdf');
@@ -246,12 +248,25 @@ class ReportController extends Controller
         }
     }
 
-    public function generateByStock()
+    public function generateByStock(Request $request)
     {
         try{
             $this->authorize('reports', User::class);
             $this->setSeo('Reporte del stock disponible');
-            $data['items'] = DB::table('stock')
+            if($request->warehouse_id){
+                $data['items'] = DB::table('stock')
+                ->join('products', 'products.id', '=', 'stock.product_id')
+                ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->where('stock.qty', '>', 0)
+                ->where('stock.warehouse_id', $request->warehouse_id)
+                ->orderBy('product_categories.name')
+                ->orderBy('products.name')
+                ->get();
+                $warehouse = Warehouse::findOrFail($request->warehouse_id);
+                $data['warehouse'] = "almacen: <strong> " . $warehouse->name . "</strong>";
+            }else{
+                $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
                 ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
@@ -259,17 +274,33 @@ class ReportController extends Controller
                 ->orderBy('product_categories.name')
                 ->orderBy('products.name')
                 ->get();
+                $data['warehouse'] = 'todos los almacenes';
+            }
+            $data['warehouse_id'] = $request->warehouse_id;
             return view('modules.reports.byStockEmbed',$data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
 
-    public function generateByStockPdf()
+    public function generateByStockPdf(Request $request)
     {
         try{
             $this->authorize('reports', User::class);
-            $data['items'] = DB::table('stock')
+            if($request->warehouse_id){
+                $data['items'] = DB::table('stock')
+                ->join('products', 'products.id', '=', 'stock.product_id')
+                ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->where('stock.qty', '>', 0)
+                ->where('stock.warehouse_id', $request->warehouse_id)
+                ->orderBy('product_categories.name')
+                ->orderBy('products.name')
+                ->get();
+                $warehouse = Warehouse::findOrFail($request->warehouse_id);
+                $data['warehouse'] = $warehouse->name;
+            }else{
+                $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
                 ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
@@ -277,7 +308,8 @@ class ReportController extends Controller
                 ->orderBy('product_categories.name')
                 ->orderBy('products.name')
                 ->get();
-//            $data['items'] = Stock::where('qty', '>', 0)->with('product')->with('product.category')->get();
+                $data['warehouse'] = 'Todos los almacenes';
+            }
             $pdf = PDF::loadView('modules.reports.templates.byStock', $data);
             return $pdf->download('Reporte - Stock disponible - '.date('dmY').'.pdf');
 
@@ -417,9 +449,10 @@ class ReportController extends Controller
                     $q->where('sale_status_id', 2);
                 })->first();
 
+
             $data['payments'] = $payments->amount;
             $data['earnings'] = $details->price;
-            $data['commissions'] = ($details->price * $this->config['commission_percentage']) / 100;
+            $data['commissions'] = ($data['earnings'] * $this->config['commission_percentage']) / 100;
             $data['expenses'] = Expense::sum('amount');
             $data['cost_price'] = $details->cost_price;
             return view('modules.reports.byProfitEmbed',$data);
@@ -473,11 +506,11 @@ class ReportController extends Controller
             $data['created_by'] = $request->created_by;
             if($request->created_by){
                 $data['users'] = User::where('id', $request->created_by)->with(['sales' => function($q) use ($date_from, $date_to){
-                    $q->where('sale_status_id', 2)->whereBetween('updated_at',[$date_from, $date_to]);
+                    $q->where('sale_status_id', 2)->whereBetween('closed_at',[$date_from, $date_to]);
                 }])->orderBy('name')->get();
             }else{
                 $data['users'] = User::with(['sales' => function($q) use ($date_from, $date_to){
-                    $q->where('sale_status_id', 2)->whereBetween('updated_at',[$date_from, $date_to]);
+                    $q->where('sale_status_id', 2)->whereBetween('closed_at',[$date_from, $date_to]);
                 }])->orderBy('name')->get();
             }
             return view('modules.reports.byCommissionEmbed',$data);
@@ -498,11 +531,11 @@ class ReportController extends Controller
             $data['created_by'] = $request->created_by;
             if($request->created_by){
                 $data['users'] = User::where('id', $request->created_by)->with(['sales' => function($q) use ($date_from, $date_to){
-                    $q->where('sale_status_id', 2)->whereBetween('updated_at',[$date_from, $date_to]);
+                    $q->where('sale_status_id', 2)->whereBetween('closed_at',[$date_from, $date_to]);
                 }])->orderBy('name')->get();
             }else{
                 $data['users'] = User::with(['sales' => function($q) use ($date_from, $date_to){
-                    $q->where('sale_status_id', 2)->whereBetween('updated_at',[$date_from, $date_to]);
+                    $q->where('sale_status_id', 2)->whereBetween('closed_at',[$date_from, $date_to]);
                 }])->orderBy('name')->get();
             }
             $pdf = PDF::loadView('modules.reports.templates.byCommission', $data);
@@ -533,7 +566,7 @@ class ReportController extends Controller
                     DB::raw('SUM(sale_details.qty) as sold'), DB::raw('SUM(sale_details.price) as money'))
                 ->where('products.product_category_id', '=', $data['category_id'])
                 ->where('sales.sale_status_id', '=', 2)
-                ->whereBetween('sales.updated_at',[$date_from, $date_to])
+                ->whereBetween('sales.closed_at',[$date_from, $date_to])
                 ->groupBy('products.id')
                 ->orderBy('sold', 'desc')
                 ->get();
@@ -561,7 +594,7 @@ class ReportController extends Controller
                     DB::raw('SUM(sale_details.qty) as sold'), DB::raw('SUM(sale_details.price) as money'))
                 ->where('products.product_category_id', '=', $data['category_id'])
                 ->where('sales.sale_status_id', '=', 2)
-                ->whereBetween('sales.updated_at',[$date_from, $date_to])
+                ->whereBetween('sales.closed_at',[$date_from, $date_to])
                 ->groupBy('products.id')
                 ->orderBy('sold', 'desc')
                 ->get();
@@ -612,4 +645,17 @@ class ReportController extends Controller
             ->where('payment_method_id', $payment_method_id)->sum('amount');
         return $total;
     }
+
+    public function generateMinStockPdf()
+    {
+        try{
+            $this->authorize('listInventory', User::class);
+            $data['items'] = Stock::whereRaw("qty <= min_stock")->get();
+            $pdf = PDF::loadView('modules.stock.minStockReportTemplate', $data);
+            return $pdf->download('Reporte - Stock minimo - '.date('dmY').'.pdf');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
 }

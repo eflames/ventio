@@ -44,8 +44,6 @@ class ProductController extends Controller
                 ->orderBy('products.id', 'desc')
                 ->get();
 
-
-
             return DataTables::of($products)
 //                ->setRowAttr(['align' => 'center'])
                 ->addColumn('actions', 'modules.products.partials.actionButton')
@@ -61,6 +59,7 @@ class ProductController extends Controller
         try{
             $this->authorize('manageInventory', User::class);
             $data['categories'] = ProductCategory::orderBy('id', 'asc')->pluck('name', 'id');
+            $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
             $this->setSeo('Productos - nuevo producto');
             return view('modules.products.create', $data);
         }catch (\Exception $e){
@@ -75,6 +74,17 @@ class ProductController extends Controller
             $product->fill($request->all());
             $product->created_by = Auth::user()->id;
             $product->save();
+            if($request->add_stock){
+                $stock = new Stock();
+                $stock->product_id = $product->id;
+                $stock->warehouse_id = $request->warehouse_id;
+                $stock->qty = $request->qty;
+                $stock->price = $request->price;
+                $stock->cost_price = $request->cost_price;
+                $stock->min_stock = $request->min_stock;
+                $stock->save();
+            }
+    
             $request->session()->flash('message', "Producto ".$request->name." creado exitosamente");
             return redirect('productos');
         }catch (\Exception $e){
@@ -164,11 +174,12 @@ class ProductController extends Controller
     }
     public function APIgetallForSale(Request $request){
         $this->authorize('listInventory', User::class);
+        $default_warehouse = Warehouse::where('is_default', 1)->first();
         $query = $request->q ? : '';
         $data = Product::search(['name', 'identifier'], $query)->whereHas('stock')->get();
         $results = [];
         foreach ($data as $result){
-            $stocks = Stock::where('product_id', $result->id)->where('qty', '>', 0)->get();
+            $stocks = Stock::where('product_id', $result->id)->where('qty', '>', 0)->where('warehouse_id', $default_warehouse->id)->get();
             foreach ($stocks as $stock){
                 $results[] = [
                     'id' => $stock->id,

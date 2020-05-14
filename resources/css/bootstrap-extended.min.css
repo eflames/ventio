@@ -141,8 +141,8 @@
     white-space:nowrap !important
 }
 .select2-container--default .select2-selection--single{
-    background-color:#fff;
-    border:1px solid #aaa;
+    background-color:#fafafa;
+    border:1px solid #fafafa;
     border-radius:4px
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered{
@@ -773,7 +773,8 @@ form label{
     color:#414141
 }
 form .form-group{
-    margin-bottom:1.5rem
+    margin-bottom:1.5rem;
+    background-color: #fafafa;
 }
 form .form-control{
     border:1px solid #D4D4D4;

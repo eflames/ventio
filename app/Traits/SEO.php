@@ -9,11 +9,12 @@
 namespace App\Traits;
 
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Illuminate\Support\Str;
 
 trait SEO
 {
     public function setSeo($title = null)
     {
-        SEOMeta::setTitle(str_limit($title,60));
+        SEOMeta::setTitle(Str::limit($title,60));
     }
 }

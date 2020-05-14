@@ -110,6 +110,9 @@
 @stop
 @section('after-scripts')
     <script>
+        $('#newCatModal').css("margin-top", $(window).height() / 2 - ($('#newCatModal').height() / 2));
+        $('#editCatModal').css("margin-top", $(window).height() / 2 - ($('#editCatModal').height() / 2));
+
         $('#editCatModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

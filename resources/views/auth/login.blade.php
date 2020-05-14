@@ -24,7 +24,7 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="stylesheet" href="{{ asset('css/switchery.min.css') }}">
 
-    <title>Inicio de sesión - Vent.IO</title>
+    <title>Inicio de sesión - Ventio</title>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('css/googlefonts.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/ventio-icons.css') }}">
@@ -55,7 +55,7 @@
                         <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
                             <div class="card-header border-0">
                                 <div class="card-title text-center">
-                                    <img src="{{ asset('images/logo.png') }}" alt="Vent.IO"><br>
+                                    <img src="{{ asset('images/logo_ventio.png') }}" alt="Ventio"><br>
                                     <span class="login_version">{{ config('ventio.VERSION') }}</span>
                                 </div>
                             </div>

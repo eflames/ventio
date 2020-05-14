@@ -6,16 +6,16 @@
  * Time: 7:48 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="procSaleModal" role="dialog" aria-labelledby="procSaleModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="procSaleModal" role="dialog" aria-labelledby="procSaleModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-grey-blue">
-                <label class="modal-title text-text-bold-600" id="procSaleModal"><h3 class="text-white">¿Procesar venta?</h3></label>
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" id="procSaleModal"><h3 class="mb-0">¿Procesar venta?</h3></label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            {{ Form::open(['url' => 'venta/procSale', 'method' => 'post']) }}
+            {{ Form::open(['url' => 'venta/procSale', 'method' => 'post', 'onsubmit' => 'procSaleSubmit.disabled = true; return true;']) }}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-12 text-center">
                                 <h5><span class="grey">Vendedor:</span> {{ $sale->seller->name }}</h5>
-                                <a href="javascript:changeSeller()">¿Cambiar vendedor?</a>
+                                <a href="javascript:changeSeller()" class="btn btn-sm btn-outline-grey-blue">Cambiar vendedor</a>
                             </div>
                         </div>
                         <div class="row pt-1" id="sellerDiv" style="display: none">
@@ -46,8 +46,8 @@
                     <div class="col-6">
                         <div class="row">
                             <div class="col-12 text-center">
-                                <h5><span class="grey">Procesar en fecha:</span> {{ date('d/m/Y') }} </h5>
-                                <a href="javascript:changeDate()">¿Cambiar fecha?</a>
+                                <h5><span class="grey">Procesar en fecha:</span> {{ date('d/m/Y') }}</h5>
+                                <a href="javascript:changeDate()" class="btn btn-sm btn-outline-grey-blue">Cambiar fecha</a>
                             </div>
                         </div>
                         <div class="row pt-1" id="dateDiv" style="display: none">
@@ -62,8 +62,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="reset" class="btn btn-outline-grey btn-lg" data-dismiss="modal" value="Cancelar">
-                <button type="submit" class="btn btn-grey-blue btn-lg ld-ext-right">Si, procesar
+                <input type="reset" class="btn btn-light btn-lg" data-dismiss="modal" value="Cancelar">
+                <button type="submit" id="procSaleSubmit" class="btn btn-grey-blue btn-lg ld-ext-right">Si, procesar
                     <div class="ld ld-ring ld-spin"></div>
                 </button>
             </div>

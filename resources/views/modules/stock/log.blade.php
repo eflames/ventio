@@ -9,6 +9,7 @@
 @extends('layouts.ventioMaster')
 @section('content')
     @include('partials.alerts')
+    @include('modules.stock.byProductModal')
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title"><i class="icon-drawer"></i> Stock</h3>
@@ -18,6 +19,11 @@
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('stock.list') }}">Lista de stock disponible</a></li>
                         <li class="breadcrumb-item">Log de cambios en inventario</li>
+                        @if (@$filtered)
+                            <li class="breadcrumb-item">
+                                <a href="{{  route('stock.log') }}"><span class="fa fa-times-circle text-danger"></span> eliminar filtro</a>
+                            </li>
+                        @endif
                     </ol>
                 </div>
             </div>
@@ -28,6 +34,9 @@
                     <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
                         <a href="{{ route('stock.list') }}" class="btn btn-green btn-lg" data-tooltip="tooltip" data-placement="top" title="Regresar">
                             <span class="fa fa-arrow-left"></span> Regresar a la lista
+                        </a>
+                        <a href="#" class="btn btn-green btn-darken-2 btn-lg" data-toggle="modal" data-target="#byProductModal">
+                            <span class="fa fa-filter"></span> Filtrar
                         </a>
                     </div>
                 </div>
@@ -41,7 +50,7 @@
                     <div class="card border-top-3 border-top-green">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard">
-                                <table class="table table-striped datatable-spanish table-bordered">
+                                <table class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Usuario</th>
@@ -60,7 +69,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7"><h3>No hay resultados</h3></td>
+                                            <td colspan="4" class="text-center"><h3>No hay resultados</h3></td>
                                         </tr>
                                     @endforelse
 
@@ -74,6 +83,11 @@
                                     </tr>
                                     </tfoot>
                                 </table>
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-end">
+                                        {{ $logs->render() }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,4 +100,7 @@
 @section('after-styles')
 @stop
 @section('after-scripts')
+<script>
+    $('#byProductModal').css("margin-top", 60);
+</script>
 @stop

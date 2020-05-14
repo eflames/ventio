@@ -67,7 +67,7 @@
                                         @php( $percentage = \App\Libraries\LoanUtils::loanPercentage($credit->amount, $credit->payments->sum('amount')) )
                                         <tr>
                                             <td class="align-middle bg-light-blue bg-lighten-5">
-                                                <a href="{{ route('client.details', ['id' => $credit->client->id_number]) }}">
+                                                <a href="{{ route('client.details', $credit->client->id_number) }}">
                                                     <strong>{{ $credit->client->name }}</strong>
                                                 </a>
                                             </td>
@@ -127,6 +127,9 @@
 @section('after-scripts')
     <script>
         $('#showCommentModal').css("margin-top", $(window).height() / 3 - $('.modal-content').height() / 3);
+        $('#addAmountModal').css("margin-top", $(window).height() / 4 - $('.modal-content').height() / 3);
+        $('#newLoanModal').css("margin-top", 100);
+        $('#newPaymentModal').css("margin-top", 100);
         $('#showCommentModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

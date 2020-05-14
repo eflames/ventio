@@ -6,7 +6,7 @@
  * Time: 11:55 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="changeUserModal" role="dialog" aria-labelledby="changeUserModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left masterModal" id="changeUserModal" role="dialog" aria-labelledby="changeUserModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             {{ Form::open(['route' => 'changeUser', 'method' => 'post']) }}

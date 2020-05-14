@@ -28,9 +28,9 @@ r(".select2-ajax-products").select2({
         templateResult: function(e) {
             if (e.loading) return e.text;
             // return "<strong>" + e.name + "</strong>";
-            var t = "<div class='container'><p><span class='fa fa-arrow-right green'></span><span class='text-bold-700 text-uppercase'> " + e.name + "</span><br>" +
-                e.description + "<br><strong><span class='fa fa-list'>" +
-                "</span> Categoría: </strong><span class='pink'>" + e.category + "</span></span></div>";
+            var t = "<div class='container text-center'><p><span class='ft-shopping-cart green'></span> - <span class='text-bold-700 text-uppercase'> " + e.name + "</span><br>" +
+                e.description + "<br>" 
+                + "</span> <span class='badge badge-secondary mt-1'>" + e.category + "</span></div>";
             return t;
 
 
@@ -68,8 +68,8 @@ r(".select2-ajax-products-sale").select2({
         templateResult: function(e) {
             if (e.loading) return e.text;
             // return "<strong>" + e.name + "</strong>";
-            var t = "<div class='container'><p><span class='fa fa-arrow-right green'></span><span class='text-bold-700 text-uppercase'> " + e.name + "</span></strong><br>" +
-                "<strong>Stock:</strong> <span class='pink'>" + e.stock + "</span> <strong>Precio:</strong> </strong><span class='pink'>$ " + e.price + "</span></div>";
+            var t = "<div class='container pt-1 pb-1'><span class='ft-shopping-cart green'></span> - <span class='text-bold-700 text-uppercase'> " + e.name + "</span></strong>" +
+                "<span class='float-right'><span class='badge badge-md badge-secondary'><i class='icon-drawer'></i>" + e.stock + "</span><span class='ml-1 badge badge-md badge-success'><strong>$" + e.price + "</strong></span></span></div>";
             return t;
 
 
@@ -107,9 +107,8 @@ r(".select2-ajax-products-sale").select2({
         templateResult: function(e) {
             if (e.loading) return e.text;
             // return "<strong>" + e.name + "</strong>";
-            var t = "<div class='container'><p><span class='fa fa-arrow-right green'></span><span class='text-bold-700 text-uppercase'> " + e.name + "</span><br>" +
-                "<strong><span class='fa fa-id-card'></span> " + e.id_number + "<br><strong><span class='fa fa-phone'>" +
-                "</strong> " + e.telephone + "</div>";
+            var t = "<div class='container'><h4 class='text-uppercase pt-0'><span class='ft-user green'></span> - " + e.name + "</h4>" +
+                "<strong><span class='fa fa-id-card grey'></span> " + e.id_number + " | <strong><span class='fa fa-phone grey'>" + "</strong> " + e.telephone + "</div>";
             return t;
 
 

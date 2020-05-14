@@ -153,6 +153,8 @@ return [
         'price' => 'Precio',
         'amount' => 'Monto',
         'payment_method_id' => 'Método de pago',
+        'add_stock' => 'Agregar Stock',
+        'image' => 'Imagen',
     ],
 
 ];

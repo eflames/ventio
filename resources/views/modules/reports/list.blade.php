@@ -19,6 +19,7 @@
     @include('modules.reports.modal.byComissionModal')
     @include('modules.reports.modal.byReturnModal')
     @include('modules.reports.modal.byCategoryModal')
+    @include('modules.reports.modal.byStockModal')
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title"> <i class="icon-pie-chart"></i> Reportes</h3>
@@ -235,9 +236,9 @@
                                     Stock disponible
                                 </h2>
                                 <p>
-                                    <a href="{{ route('report.byStock') }}" class="btn btn-indigo btn-lg">
+                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byStockModal">
                                         <span class="fa fa-check"></span> Generar
-                                    </a>
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -254,6 +255,7 @@
 @section('after-scripts')
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
+        $('.report-modal').css("margin-top", $(window).height() / 4 - ($('.modal-content').height() / 2));
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {

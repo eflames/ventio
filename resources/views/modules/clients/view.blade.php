@@ -19,7 +19,7 @@
                         <li class="breadcrumb-item"><a href="{{ route('clients.list') }}">Clientes registrados</a></li>
                         <li class="breadcrumb-item">Detalle de <strong>{{ $client->name }}</strong>
                             @can('manageClients', \App\User::class)
-                                <a href="{{route('clients.edit', ['id' => $client->id]) }}"> <span class="fa fa-pencil"></span> editar</a>
+                                <a href="{{route('clients.edit', $client->id) }}" class="text-primary"> <span class="fa fa-pencil"></span> Editar</a>
                             @endcan
                         </li>
                     </ol>
@@ -205,7 +205,7 @@
                                     <span class="fa fa-ban"></span> Notificar deuda por correo
                                 </button>
                             @else
-                                <a href="{{route('client.notify', ['id' => $client->id]) }}" data-tooltip="tooltip"
+                                <a href="{{route('client.notify', $client->id) }}" data-tooltip="tooltip"
                                    data-placement="top" title="Enviar notificación de deuda" class="btn btn-orange btn-block btn-lg">
                                     <span class="fa fa-envelope"></span> Notificar deuda por correo
                                 </a>

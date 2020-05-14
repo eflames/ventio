@@ -6,13 +6,13 @@
  * Time: 11:55 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="addQtyModal" role="dialog" aria-labelledby="addQtyModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="addQtyModal" role="dialog" aria-labelledby="addQtyModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-light-green">
-                <label class="modal-title text-text-bold-600" id="addQtyModal"><h3 class="text-white modal-title-changed"></h3></label>
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" id="addQtyModal"><h3 class="modal-title-changed mb-0"></h3></label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             {{ Form::open(['url' => 'stock/addQty', 'method' => 'post']) }}
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="reset" class="btn btn-grey btn-lg" data-dismiss="modal" value="Cancelar">
+                    <input type="reset" class="btn btn-light btn-lg" data-dismiss="modal" value="Cancelar">
                     <button type="submit" class="btn btn-light-green btn-lg ld-ext-right">Añadir
                         <div class="ld ld-ring ld-spin"></div>
                     </button>

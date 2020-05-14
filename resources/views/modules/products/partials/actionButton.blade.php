@@ -9,13 +9,13 @@
     <div class="col-12 text-center">
         {{ Form::open(['url' => 'productos/'.$id, 'method' => 'delete', 'id'=>'formelim-'.$id]) }}
         <button type="button"
-                class="btn btn-grey-blue btn-sm" data-comment="{{ $description }}"
+                class="btn btn-light btn-sm" data-comment="{{ $description }}"
                 data-toggle="modal" data-target="#showCommentModal"
                 data-tooltip="tooltip" data-placement="left" title="ver descripción">
-            <span class="fa fa-exclamation-triangle"></span>
+            <span class="fa fa-eye"></span>
         </button>
         @can('manageInventory', \App\User::class)
-            <a href="{{route('products.edit', ['id' => $id]) }}" data-tooltip="tooltip"
+            <a href="{{route('products.edit', $id) }}" data-tooltip="tooltip"
                data-placement="top" title="Editar" class="btn btn-blue btn-sm">
                 <span class="fa fa-pencil"></span>
             </a>

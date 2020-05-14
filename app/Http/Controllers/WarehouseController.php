@@ -6,6 +6,7 @@ use App\Models\Warehouse;
 use App\Traits\SEO;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class WarehouseController extends Controller
 {
@@ -28,7 +29,7 @@ class WarehouseController extends Controller
             $ware = new Warehouse();
             $ware->fill($request->all());
             $ware->created_by = auth()->user()->id;
-            $ware->slug = str_slug($request->name);
+            $ware->slug = Str::slug($request->name);
             if($request->is_default == 1){
                  Warehouse::where('is_default', 1)->update(['is_default' => null]);
                  $ware->is_default = 1;
@@ -46,7 +47,7 @@ class WarehouseController extends Controller
             $this->authorize('config', User::class);
             $ware = Warehouse::findOrFail($request->warehouse_id);
             $ware->fill($request->all());
-            $ware->slug = str_slug($request->name);
+            $ware->slug = Str::slug($request->name);
             if($request->is_default == 1){
                 Warehouse::where('is_default', 1)->update(['is_default' => null]);
                 $ware->is_default = 1;

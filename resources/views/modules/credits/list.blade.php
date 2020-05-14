@@ -59,7 +59,7 @@
                                     @forelse($credits as $credit)
                                         <tr>
                                             <td class="align-middle @if($credit->claimed) bg-grey bg-lighten-4 @else bg-light-blue bg-lighten-5 @endif">
-                                                <a href="{{ route('client.details', ['id' => $credit->client->id_number]) }}">
+                                                <a href="{{ route('client.details', $credit->client->id_number) }}">
                                                     <strong>{{ $credit->client->name }}</strong>
                                                 </a>
                                             </td>
@@ -67,7 +67,7 @@
                                                 @if($credit->sale_id === NULL)
                                                     <span class="blue">Manualmente</span>
                                                 @else
-                                                    <a href="{{ route('sale.view', ['id' => base64_encode($credit->sale_id)]) }}">
+                                                    <a href="{{ route('sale.view', base64_encode($credit->sale_id)) }}">
                                                         <strong>#{{ $credit->sale_id }}</strong>
                                                     </a>
                                                 @endif
@@ -91,10 +91,10 @@
                                                 {{ Form::open(['url' => 'cuentas/por-pagar/'.$credit->id, 'method' => 'delete', 'id'=>'formelim-'.$credit->id]) }}
                                                 @if($credit->comment)
                                                     <button type="button"
-                                                            class="btn btn-grey-blue btn-sm" data-comment="{{ $credit->comment }}"
+                                                            class="btn btn-lighte btn-sm" data-comment="{{ $credit->comment }}"
                                                             data-toggle="modal" data-target="#showCommentModal"
-                                                            data-tooltip="tooltip" data-placement="left" title="ver comentario">
-                                                        <span class="fa fa-exclamation-triangle"></span>
+                                                            data-tooltip="tooltip" data-placement="left" title="Ver comentario">
+                                                        <span class="fa fa-eye"></span>
                                                     </button>
                                                 @endif
                                                 @can('manageCredits', \App\User::class)
@@ -148,6 +148,8 @@
 @section('after-scripts')
     <script>
         $('#showCommentModal').css("margin-top", $(window).height() / 3 - $('.modal-content').height() / 3);
+        $('#newCreditModal').css("margin-top", 100);
+        $('#addAmountModal').css("margin-top", $(window).height() / 4 - $('.modal-content').height() / 5);
         $('#showCommentModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

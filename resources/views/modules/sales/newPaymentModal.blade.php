@@ -6,13 +6,13 @@
  * Time: 7:48 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="newPaymentModal" role="dialog" aria-labelledby="newPaymentModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="newPaymentModal" role="dialog" aria-labelledby="newPaymentModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-success">
-                <label class="modal-title text-text-bold-600" id="newPaymentModal"><h3 class="text-white">Agregar pago</h3></label>
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" id="newPaymentModal"><h3 class="mb-0">Agregar pago</h3></label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             {{ Form::open(['url' => 'venta/addPayment', 'method' => 'post', 'class' => 'AddItemForm', 'data-focus' => 'payment_method_id']) }}
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="reset" class="btn btn-outline-grey btn-lg" data-dismiss="modal" value="Cancelar">
+                <input type="reset" class="btn btn-light btn-lg" data-dismiss="modal" value="Cancelar">
                 <button type="submit" class="btn btn-success btn-lg ld-ext-right" id="addPaymentButton">Agregar
                     <div class="ld ld-ring ld-spin"></div>
                 </button>

@@ -11,7 +11,7 @@
 
 <div class="content-header row">
     <div class="content-header-left col-md-6 col-12 mb-2">
-        <h3 class="content-header-title">¡Bienvenido a Vent.IO!</h3>
+        <h3 class="content-header-title">¡Bienvenido a Ventio!</h3>
     </div>
 </div>
 <div class="content-body">
@@ -123,7 +123,7 @@
                                     </a>
                                 </td>
                                 <td class="text-truncate">
-                                    <a href="{{ route('client.details', ['id' => $sale->client->id_number]) }}">
+                                    <a href="{{ route('client.details', $sale->client->id_number) }}">
                                         <strong>{{ $sale->client->name }}</strong>
                                     </a>
                                 </td>

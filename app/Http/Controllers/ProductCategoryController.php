@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -30,7 +31,7 @@ class ProductCategoryController extends Controller
             $cat = new ProductCategory();
             $cat->fill($request->all());
             $cat->created_by = auth()->user()->id;
-            $cat->slug = str_slug($request->name);
+            $cat->slug = Str::slug($request->name);
             $cat->save();
             $request->session()->flash('message', "Categoria ".$request->name." creada exitosamente");
             return redirect('categorias');
@@ -44,7 +45,7 @@ class ProductCategoryController extends Controller
             $this->authorize('config', User::class);
             $cat = ProductCategory::findOrNew($request->category_id);
             $cat->fill($request->all());
-            $cat->slug = str_slug($request->name);
+            $cat->slug = Str::slug($request->name);
             $cat->save();
             $request->session()->flash('message', "Categoria ".$request->name." actualizada exitosamente");
             return redirect('categorias');

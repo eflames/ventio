@@ -12,6 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Stock;
 
 class HomeController extends Controller
 {
@@ -23,7 +24,7 @@ class HomeController extends Controller
      * @param ChartUtils $chartUtils
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function dashboard(ChartUtils $chartUtils)
+    public function dashboard(ChartUtils $chartUtils, Request $request)
     {
         try{
             $this->setSeo('Inicio');
@@ -39,6 +40,10 @@ class HomeController extends Controller
                 ->with('details')->with('client')->get();
             $data['loansTotal'] = Loan::where('closed', 0)->sum('amount');
             $data['depositsTotal'] = Deposit::where('claimed')->sum('amount');
+            $minStock_alert = Stock::whereRaw("qty <= min_stock")->get();
+            if($minStock_alert->count() > 1){
+                $request->session()->flash('warning', 'Uno o más productos estan por debajo del stock mínimo.');
+            }
             $data += $chartUtils->getChartData();
             return view('modules.home.dashboard', $data);
         }catch (\Exception $e){
@@ -78,7 +83,17 @@ class HomeController extends Controller
             }
             $user->save();
             $request->session()->flash('message', 'Perfil actualizado exitosamente');
-            return redirect('/');
+            return redirect()->back();
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function about()
+    {
+        try{
+            $this->setSeo('Acerca de Ventio');
+            return view('modules.home.about');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

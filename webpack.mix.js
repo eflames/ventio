@@ -20,6 +20,7 @@ mix.styles([
     'resources/css/colors.min.css',
     'resources/css/components.min.css',
     'resources/css/horizontal-top-icon-menu.min.css',
+    'resources/css/animate.min.css',
     'resources/css/sweetalert.css',
     'resources/css/datatables-b4.min.css',
     'resources/css/datatables-responsive-b4.min.css',

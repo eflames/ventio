@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Warehouse;
 
 class SaleController extends Controller
 {
@@ -64,6 +65,8 @@ class SaleController extends Controller
             $data['paymentPercentage'] = round( ($data['sale']->payments->sum('amount') * 100) / $saleTotal, 1, PHP_ROUND_HALF_DOWN);
             $data['balance'] = $data['sale']->client->balance->sum('amount');
             $data['sellers'] = User::where('id', '<>', Auth::id())->pluck('name', 'id');
+            $data['warehouses'] = Warehouse::orderBy('id','desc')->get();
+            $data['default_warehouse'] = Warehouse::where('is_default', 1)->first();
             $this->setSeo('Nueva venta');
             return view('modules.sales.create', $data);
         }catch (\Exception $e){
@@ -565,6 +568,20 @@ class SaleController extends Controller
             return back()->with('message', 'El item se ha devuelto correctamente');
         }catch (\Exception $e){
             DB::rollBack();
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function changeDefault($warehouse_id, Request $request){
+        try{
+            $this->authorize('sales', User::class);
+            Warehouse::where('is_default', 1)->update(['is_default' => null]);
+            $data = Warehouse::findOrFail($warehouse_id);
+            $data->is_default = 1;
+            $data->save();
+            $request->session()->flash('message', "Almacén cambiado a: <strong>".$data->name . "</strong>");
+            return redirect()->back();
+        }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }

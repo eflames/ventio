@@ -26,17 +26,16 @@
                 <ul class="nav navbar-nav float-right">
                     <li class="dropdown dropdown-user nav-item">
                         <a class="dropdown-toggle nav-link dropdown-user-link"
-                           href="horizontal-nav-dark.html#"
-                           data-toggle="dropdown">
-                            {{--<span class="avatar avatar-online"><img src="/images/avatar-s-1.png" alt="avatar"><i></i></span>--}}
-                            <span class="user-name" style="font-size: 1rem;"><strong>{{ auth()->user()->name }}</strong></span>
+                           href="#" data-toggle="dropdown">
+                            <span class="avatar avatar-online"></span>
+                            <span class="user-name" style="font-size: 1rem;"><i class="fa fa-user grey"></i><strong>{{ auth()->user()->name }}</strong></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item @if(Request::is('miperfil*')) active @endif" href="{{ route('profile.edit') }}"><i class="ft-user"></i> Mi perfil</a>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changeUserModal" accesskey="u"><i class="ft-repeat"></i> Cambiar usuario</a>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#shortcutsModal"><i class="fa fa-keyboard-o"></i> Atajos de teclado</a>
-                            <a class="dropdown-item" href="https://docs.google.com/document/d/1_qSMwXslaffuYg-1_Hkl81_9RE43ULKkP-gSzgRhg2U/edit?usp=sharing" data-tooltip="tooltip" data-placement="left" title="Requiere conexión a internet" target="_blank">
-                                <i class="fa fa-hand-paper-o"></i> Changelogs
+                            <a class="dropdown-item @if(Request::is('miperfil*')) active @endif" href="{{ route('profile.edit') }}" data-tooltip="tooltip" data-placement="left" title="Editar perfil de usuario"><i class="ft-user"></i> Mi perfil</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changeUserModal" accesskey="u" data-tooltip="tooltip" data-placement="left" title="Cambio rápido de usuario"><i class="ft-repeat"></i> Cambiar usuario</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#shortcutsModal" data-tooltip="tooltip" data-placement="left" title="Lista de atajos de teclado"><i class="fa fa-keyboard-o"></i> Atajos de teclado</a>
+                            <a class="dropdown-item" href="{{ route('system.about') }}" data-tooltip="tooltip" data-placement="left" title="Información sobre la aplicación">
+                                <i class="fa fa-info"></i> Acerca de Ventio
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('/logout') }}"

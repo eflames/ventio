@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Str;
-
+if (!class_exists('Memcached')) {
+    include ("memcached.php");
+}
 return [
 
     /*

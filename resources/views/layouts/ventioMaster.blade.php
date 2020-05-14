@@ -5,7 +5,7 @@
  * Date: 15/1/19
  * Time: 10:00 PM
  */?>
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -49,6 +49,8 @@
 <script src="{{ asset('js/ventio-scripts.js') }}"></script>
 
 @yield('after-scripts')
-
+<script>
+    $('.masterModal').css("margin-top", 100);
+</script>
 </body>
 </html>

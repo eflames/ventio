@@ -48,7 +48,7 @@
                                         <div class="col-4">
                                             <h4>Cliente:</h4>
                                             <h4 class="grey">
-                                                <a href="{{ route('client.details', ['id' => $sale->client->id_number]) }}"
+                                                <a href="{{ route('client.details', $sale->client->id_number) }}"
                                                    data-tooltip="tooltip" data-placement="right" title="Ver detalles del cliente">
                                                     {{ $sale->client->name }}
                                                 </a>
@@ -125,12 +125,12 @@
                                                     <td class="align-middle">
                                                         <strong>{{ $detail->product->name }}</strong>
                                                         @if($detail->returned <> 1)
-                                                            <button type="button" class="btn btn-sm btn-link"
+                                                            <button type="button" class="btn btn-sm btn-light"
                                                                     data-toggle="modal" data-tooltip="tooltip"
                                                                     data-placement="right" title="Devolver item"
                                                                     data-target="#returnModal" data-detail_id="{{ $detail->id }}"
                                                                     data-name="{{ $detail->product->name }}">
-                                                                <span class="fa fa-refresh green"></span>
+                                                                <span class="fa fa-refresh green"></span> Devolver
                                                             </button>
                                                         @else
                                                             <small class="red">Devuelto</small>
@@ -227,6 +227,7 @@
 @section('after-scripts')
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
+        $('#returnModal').css("margin-top", $(window).height() / 4 - 100);
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {

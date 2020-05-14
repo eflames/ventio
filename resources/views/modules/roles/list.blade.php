@@ -55,7 +55,7 @@
                                             <td>{{ $rol->name }}</td>
                                             <td class="text-center">
                                                 {{ Form::open(['url' => 'usuarios/permisos/'.$rol->id, 'method' => 'delete', 'id'=>'formelim-'.$rol->id]) }}
-                                                <a href="{{route('roles.edit', ['id' => $rol->id]) }}" data-tooltip="tooltip"
+                                                <a href="{{route('roles.edit', $rol->id) }}" data-tooltip="tooltip"
                                                    data-placement="left" title="Editar" class="btn btn-blue btn-sm">
                                                     <span class="fa fa-pencil"></span>
                                                 </a>

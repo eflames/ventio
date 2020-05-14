@@ -11,6 +11,7 @@
 <style>
     body{
         font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
     }
     .header, td, tr{
         text-align: center;
@@ -30,7 +31,7 @@
         color: #000;
         vertical-align: middle;
         background-color: #f2f2f2;
-        font-size: 20px;
+        font-size: 17px;
         font-weight: bold;
     }
     .descripcion{
@@ -55,6 +56,7 @@
     <img src="{{asset('images/logo.png')}}">
     <h1>REPORTE</h1>
     <div class="titulo">STOCK DISPONIBLE</div>
+    <strong>{{ $warehouse }}</strong>
     <br>
     Fecha de reporte: {{ date('d-m-Y') }}
 

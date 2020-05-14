@@ -57,7 +57,7 @@ return [
 
         'backup' => [
             'driver' => 'local',
-            'root' => base_path('backups'),
+            'root' => public_path() . '/backups',
             'visibility' => 'public',
         ],
 

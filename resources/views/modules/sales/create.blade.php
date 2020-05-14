@@ -102,7 +102,7 @@
                                     <dl>
                                         <dt>Nombre:</dt>
                                         <dd>
-                                            <a href="{{ route('client.details', ['id' => $sale->client->id_number]) }}"
+                                            <a href="{{ route('client.details', $sale->client->id_number) }}"
                                                data-tooltip="tooltip" data-placement="right" title="Detalles del cliente">
                                                 {{ $sale->client->name }}
                                             </a>
@@ -119,6 +119,26 @@
                                 </div>
                             </div>
                         </div>
+                        @can ('config', \App\User::class)
+                        <div class="card">
+                            <div class="card-header pb-0">
+                                <h4 class="card-title text-center">Almacen: <strong>{{ $default_warehouse->name }}</strong></h4>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="btn-group btn-block">
+                                        <button type="button" class="btn btn-light btn-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Cambiar almacén... </button>
+                                        <div class="dropdown-menu">
+                                            @foreach($warehouses as $warehouse)
+                                                <a href="{{ route('sales.changeDefault', $warehouse->id) }}" class="dropdown-item">{{ $warehouse->name }}</a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endcan
+                        
                         @include('modules.sales.procSaleModal')
                         <div id="procButtons">
                             @include('modules.sales.partials.procButtons')
@@ -154,6 +174,10 @@
     <script src="{{ asset('js/bootstrap-editable.min.js') }}"></script>
     <script src="{{ asset('js/saleAjaxFunctions.js') }}"></script>
     <script>
+        $('#procSaleModal').css("margin-top", $(window).height() / 4 - 50);
+        $('#changePriceModal').css("margin-top", $(window).height() / 4 - 100);
+        $('#changePriceModalFull').css("margin-top", $(window).height() / 4 - $('.modal-content').height() / 3);
+        $('#newPaymentModal').css("margin-top", $(window).height() / 4 - 100);
         $('#changePriceModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

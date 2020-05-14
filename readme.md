@@ -18,6 +18,7 @@ Ventio features:
 - It has user levels that allow full control of what each user of the system can do
 - It is designed in a generic way so that it can adapt to all types of commerce
 - Highly customizable
+- and a loooot more....
 - more features **soon**
 
 Ventio is based on Laravel Framework and is part of the Grupo Tera products (My own company)

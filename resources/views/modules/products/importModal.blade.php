@@ -6,7 +6,7 @@
  * Time: 11:55 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="importModal" role="dialog" aria-labelledby="importModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="importModal" role="dialog" aria-labelledby="importModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-light-green">

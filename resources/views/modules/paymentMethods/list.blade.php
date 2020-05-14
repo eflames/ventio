@@ -66,7 +66,7 @@
                                                                 data-tooltip="tooltip" data-placement="left" title="Editar">
                                                             <span class="fa fa-pencil"></span>
                                                         </button>
-                                                        @if(($method->id !== 1) && ($method->id !== 2))
+                                                        @if($method->id > 5)
                                                         <button type="button" onclick="alertElim('{{$method->id}}')"
                                                                 class="btn btn-danger btn-sm"
                                                                 data-tooltip="tooltip" data-placement="right" title="Eliminar">
@@ -105,6 +105,7 @@
 @stop
 @section('after-scripts')
     <script>
+        $('.modal-pay').css("margin-top", $(window).height() / 2 - ($('.modal-pay').height() / 2));
         $('#editMethodModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

@@ -189,6 +189,9 @@
 @stop
 @section('after-scripts')
     <script>
+        $('#transferQtyModal').css("margin-top", $(window).height() / 4 - $('.modal-content').height());
+        $('#addStockModal').css("margin-top", $(window).height() / 4 - $('.modal-content').height() / 3);
+        $('#addQtyModal').css("margin-top", $(window).height() / 4 - $('.modal-content').height() / 3);
         $('#editPriceModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);

@@ -6,7 +6,7 @@
  * Time: 7:48 PM
  */?>
 
-<div class="modal animated bounceInLeft text-left" id="showCommentModal" role="dialog" aria-labelledby="showCommentModal" aria-hidden="true">
+<div class="modal animated bounceInUp text-left" id="showCommentModal" role="dialog" aria-labelledby="showCommentModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">

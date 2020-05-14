@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('reports.list') }}">Lista de reportes disponibles</a></li>
                         <li class="breadcrumb-item">
-                            Stock disponible para clientes
+                            Stock disponible para clientes en {!! $warehouse !!}
                         </li>
                     </ol>
                 </div>
@@ -28,6 +28,7 @@
             <div class="media width-250 float-right">
                 <div class="media-body media-right text-right">
                     {{ Form::open(['route' => 'report.byStockPdf', 'method' => 'get']) }}
+                    {{ Form::hidden('warehouse_id', $warehouse_id) }}
                     <button type="submit" class="btn btn-indigo btn-lg">
                         <span class="fa fa-file-pdf-o"></span> Descargar PDF
                     </button>

@@ -114,6 +114,7 @@
 @stop
 @section('after-scripts')
     <script>
+        $('.expenses-modal').css("margin-top", $(window).height() / 5 - $('.modal-content').height() / 2);
         $('#editExpenseModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var modal = $(this);
