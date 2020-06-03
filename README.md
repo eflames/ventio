@@ -25,7 +25,7 @@ Ventio is based on Laravel Framework and is part of the Grupo Tera products (My 
 
 **About Ventio name:** Vent is for VENTAS and INVENTARIO words (spanish) and IO is for Input Output... Yikes!! smart AF!
 
-More info in my website: http://www.ernestoflames.com
+More info in my website: https://www.ernestoflames.com
 
 ## Some screenshots
 
