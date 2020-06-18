@@ -83,6 +83,7 @@ class ProductController extends Controller
                 $stock->cost_price = $request->cost_price;
                 $stock->min_stock = $request->min_stock;
                 $stock->save();
+                StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
             }
     
             $request->session()->flash('message', "Producto ".$request->name." creado exitosamente");

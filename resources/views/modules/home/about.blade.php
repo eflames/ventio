@@ -22,7 +22,7 @@
                                     <div class="col-12 text-center">
                                         <h1>Acerca de:</h1>
                                         <img src="{{ asset('images/logo_ventio.png') }}" alt="Logo Ventio">
-                                        <h3>v1.6.0RC</h3>
+                                        <h3>{{ config('ventio.VERSION') }}</h3>
                                     </div>
                                 </div>
                                 <hr>
@@ -32,11 +32,24 @@
                                             <div class="col-12">
                                                 <h3 class="mb-1">Changelog <small class="grey">Lista de cambios y actualizaciones</small></h3>
                                                 ---
-                                                <h4 class="pink">v1.6.0RC <small class="grey">12/05/2020 <strong>(ACTUAL)</strong></small></h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="pink">v1.6.1RC <small class="grey">20/05/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <ul>
+                                                    <li>Fixed stock log doesn't store changes when adding stock from products</li>
+                                                    <li>Fixed pagination when filtering logs</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="pink">v1.6.0RC <small class="grey">12/05/2020</small></h4>
                                                 <ul>
                                                     <li>Upgraded Laravel version, from 5.7 to 6.18 LTS</li>
                                                     <li>New column to add stock in the same product screen</li>
-                                                    <li>Improved performance with cache in stock and sales (HUGE PERFORMANCE IMPROVEMENTS IN NEXT VERSION)</li>
+                                                    <li>Improved performance with cache in stock and sales</li>
                                                     <li>Added filter by User, product and date in stock log</li>
                                                     <li>Added button to change warehouse inside sale</li>
                                                     <li>Added warehouse filter for Stock Reports</li>

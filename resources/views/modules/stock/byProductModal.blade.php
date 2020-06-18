@@ -14,7 +14,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            {{ Form::open(['route' => 'stock.filter', 'method' => 'post']) }}
+            {{ Form::open(['route' => 'stock.filter', 'method' => 'get']) }}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">

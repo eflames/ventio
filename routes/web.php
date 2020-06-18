@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::get('stock/descargar', 'StockController@downloadStock')->name('stock.report');
     Route::get('stock/descargar/{slug}', 'StockController@downloadFilteredStock')->name('stock.reportFiltered');
     Route::get('stock/log', 'StockController@showLog')->name('stock.log');
-    Route::post('stock/log/filtrado', 'StockController@showLogFiltered')->name('stock.filter');
+    Route::get('stock/log/filtrado', 'StockController@showLogFiltered')->name('stock.filter');
     Route::resource('stock', 'StockController')->names([
         'index' => 'stock.list',
         'create' => 'stock.create',

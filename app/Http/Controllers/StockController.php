@@ -142,6 +142,13 @@ class StockController extends Controller
             ->orderBy('id', 'DESC')->paginate(20);
             $data['filtered'] = true;
             $data['users'] = User::pluck('name', 'id');
+            $data['logs']->appends([
+            'user_id' => $request->user_id,
+            'created_by' => $request->created_by,
+            'product_id' => $request->product_id,
+            'date_from' => $request->date_from,
+            'date_to' => $request->date_to
+            ]);
             return view('modules.stock.log', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
