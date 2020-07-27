@@ -34,7 +34,7 @@
                         <div class="col-12">
                             <fieldset class="form-group form-group-style">
                                 <label for="id_number" class="filled">Cédula<span class="text-danger">*</span></label>
-                                {{ Form::text('id_number', null, ['class' => 'form-control', 'required' => true]) }}
+                                {{ Form::text('id_number', null, ['class' => 'form-control', 'required' => true, 'maxlength' => 8]) }}
                             </fieldset>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="col-12">
                             <fieldset class="form-group form-group-style">
                                 <label for="telephone" class="filled">Teléfono<span class="text-danger">*</span></label>
-                                {{ Form::text('telephone', null, ['class' => 'form-control', 'required' => true]) }}
+                                {{ Form::text('telephone', null, ['class' => 'form-control', 'required' => true, 'maxlength' => 11]) }}
                             </fieldset>
                         </div>
                     </div>

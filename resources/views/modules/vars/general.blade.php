@@ -10,6 +10,7 @@
 @include('modules.vars.newVarModal')
 @include('modules.vars.editVarModal')
 @include('partials.alerts')
+@include('modules.vars.partials.licenseModal')
 
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -39,16 +40,19 @@
     <div class="content-body">
         <section id="configuration">
             <div class="row">
-                <div class="col-12">
+                <div class="col-7">
                     <div class="card border-top-3">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard">
                                 {{ Form::open(['route' => 'config.setStore', 'method' => 'post']) }}
+                                <div class="row">
+                                    <div class="col-12 mb-1"><h4>Tienda</h4></div>
+                                </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <fieldset class="form-group form-group-style">
                                                 <label class="filled">Nombre de la tienda: <span class="text-danger">*</span></label>
-                                                {{ Form::text('store_name', $config['store_name'], ['class' => 'form-control', 'required' => true]) }}
+                                                {{ Form::text('store_name', $config['store_name'], ['class' => 'form-control', 'disabled' => true]) }}
                                             </fieldset>
                                         </div>
                                         <div class="col-6">
@@ -59,13 +63,45 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 text-right">
+                                        <div class="col-8">
+                                            <p><span class="danger"><strong>Importante:</strong></span> El nombre de la tienda está definido por la licencia adquirida. No se puede editar manualmente.</p>
+                                        </div>
+                                        <div class="col-4 text-right">
                                             <button type="submit" class="btn btn-light btn-lg ld-ext-right">
                                                 Actualizar <div class="ld ld-ring ld-spin"></div>
                                             </button>
                                         </div>
+                                        
                                     </div>
                                 {{ Form::close() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="card border-top-3">
+                        <div class="card-content collapse show">
+                            <div class="card-body card-dashboard">
+                                {{-- <div class="row">
+                                    <div class="col-12"><h4>Información de la licencia</h4></div>
+                                </div> --}}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p><strong>Estado de la licencia:</strong> <span class="text-success">ACTIVA</span></p>
+                                        <p><strong>Propietario:</strong> {{ $licenseOwner }}</p>
+                                        <p><strong>Licencia válida hasta:</strong> {{ $licenseDate->format('d/m/Y') }}</p>
+                                        <p><strong>Instalada el:</strong> {{ $license->created_at->format('d/m/Y') }}</p>
+                                        <p><button class="btn btn-primary" data-toggle="modal" data-target="#licenseModal">Actualizar licencia</button></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><small><strong>Licencia:</strong> {{ $license->value }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -80,12 +116,14 @@
                                     <p class="text-center"><img src="{{ asset('images/logo.png') }}" alt="Logo"></p>
                                     <p class="text-center">Cambia el logo del sistema para que aparezca en la barra superior y en todos los reportes.</p>
                                     <p class="text-center"><span class="text-info">IMPORTANTE:</span> Los formatos permitidos son <strong>JPG y PNG</strong></p>
-                                    <label class="btn btn-primary btn-block" for="my-file-selector">
-                                        <input id="my-file-selector" type="file" name="image" style="display:none;" onchange="$('#upload-file-info').html('¡Imagen seleccionada!');">
-                                        Seleccionar archivo
-                                    </label>
-                                    <div class="text-center pb-2">
-                                        <span class='badge badge-primary' id="upload-file-info"></span>
+                                    <p class="text-center">
+                                        <label class="btn btn-primary" for="my-file-selector">
+                                            <input id="my-file-selector" type="file" name="image" style="display:none;" onchange="$('#upload-file-info').html('¡Imagen seleccionada!');">
+                                            Seleccionar archivo
+                                        </label>
+                                    </p>
+                                    <div class="text-center">
+                                        <span class='badge badge-success' id="upload-file-info"></span>
                                     </div>
                                     <p class="text-center">
                                         <button type="submit" class="btn btn-light btn-lg ld-ext-right">
@@ -154,6 +192,7 @@
     <link rel="stylesheet" href="{{ asset('css/switchery.min.css') }}">
 @stop
 @section('after-scripts')
+
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -172,5 +211,6 @@
             modal.find('#description').val(button.data('description'));
             modal.find('#var_id').val(button.data('var_id'));
         });
+        $('#licenseModal').css("margin-top", $(window).height() / 4 - ($('.modal-content').height() / 2));
     </script>
 @stop

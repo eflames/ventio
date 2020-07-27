@@ -16,7 +16,7 @@
 @include('modules.products.showCommentModal')
 
     <div class="content-header row">
-        <div class="content-header-left col-md-6 col-12 mb-2">
+        <div class="content-header-left col-md-4 col-12 mb-2">
             <h3 class="content-header-title"><i class="icon-drawer"></i> Productos</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
@@ -27,8 +27,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4 col-12 mb-2">
+            <fieldset class="form-group position-relative has-icon-left">
+                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por identificador o nombre', 'id' => 'searchField', 'data-url' => route('api.getProducts')]) }}
+                <div class="form-control-position">
+                    <i class="icon-magnifier grey"></i>
+                </div>
+            </fieldset>
+        </div>
         @can('manageInventory', \App\User::class)
-            <div class="content-header-right col-md-6 col-12">
+            <div class="content-header-right col-md-4 col-12">
                 <div class="media width-400 float-right">
                     <div class="media-body media-right text-right">
                         <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
@@ -51,8 +59,9 @@
                 <div class="col-12">
                     <div class="card border-top-3 border-top-green">
                         <div class="card-content collapse show">
+                            <div id="loadSpinner" class="text-center"><span class="fa fa-spinner fa-spin fa-2x"></span></div>
                             <div class="card-body card-dashboard">
-                                <table id="datatable-spanish-products-dt" class="table table-striped table-bordered table-borderless">
+                                <table class="table table-striped table-bordered table-borderless">
                                     <thead>
                                     <tr>
                                         <th>Identificador</th>
@@ -61,6 +70,9 @@
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                     </thead>
+                                    <tbody id="recordsTable">
+                                        @include('modules.products.partials.recordsTable')
+                                    </tbody>
                                     <tfoot>
                                     <tr>
                                         <th>Identificador</th>
@@ -70,6 +82,9 @@
                                     </tr>
                                     </tfoot>
                                 </table>
+                                <div class="float-right">
+                                    {{ $products->render() }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,12 +98,5 @@
 
 @stop
 @section('after-scripts')
-    <script>
-        $('#showCommentModal').css("margin-top", $(window).height() / 3 - $('.modal-content').height() / 3);
-        $('#showCommentModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var modal = $(this);
-            modal.find('#comment').html(button.data('comment'));
-        })
-    </script>
+
 @stop

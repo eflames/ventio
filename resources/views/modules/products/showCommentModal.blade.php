@@ -9,6 +9,12 @@
 <div class="modal animated bounceInUp text-left" id="showCommentModal" role="dialog" aria-labelledby="showCommentModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header bg-light">
+                <label class="modal-title text-text-bold-600" idw="showCommentModal"><h3>Descripción</h3></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">

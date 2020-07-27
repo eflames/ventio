@@ -20,6 +20,7 @@
     @include('modules.reports.modal.byReturnModal')
     @include('modules.reports.modal.byCategoryModal')
     @include('modules.reports.modal.byStockModal')
+    @include('modules.reports.modal.byStockLogModal')
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <h3 class="content-header-title"> <i class="icon-pie-chart"></i> Reportes</h3>
@@ -36,213 +37,211 @@
     <div class="content-body">
         <section id="configuration">
             <div class="row">
-                <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-calendar font-large-3"></i></p>
-                                <h2>
-                                    Ventas por fecha
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byDateModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-user-following font-large-3"></i></p>
-                                <h2>
-                                    Ventas por cliente
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byClientModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-drawer font-large-3"></i></p>
-                                <h2>
-                                    Ventas por producto
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byProductModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-book-open font-large-3"></i></p>
-                                <h2>
-                                    Ventas por categoría
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byCategoryModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-12">
+                    <h2 class="indigo">Reportes de venta</h2>
+                    <hr>
                 </div>
             </div>
             <div class="row">
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-credit-card font-large-3"></i></p>
-                                <h2>
-                                    Créditos por cobrar
-                                </h2>
-                                <p>
-                                    <a href="{{ route('report.byCredit') }}" class="btn btn-indigo btn-lg">
-                                        <span class="fa fa-check"></span> Generar
-                                    </a>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byDateModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-calendar font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Ventas por fecha.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-calculator font-large-3"></i></p>
-                                <h2>
-                                    Flujo de caja
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byTypeModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byClientModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-user-following font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Ventas por cliente.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-arrow-down-circle font-large-3"></i></p>
-                                <h2>
-                                    Gastos
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byExpensesModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byProductModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-drawer font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Ventas por producto.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-arrow-up-circle font-large-3"></i></p>
-                                <h2>
-                                    Ganacias
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byProfitModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byCategoryModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-book-open font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Ventas por categoría.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="indigo">Reportes financieros</h2>
+                    <hr>
                 </div>
             </div>
             <div class="row">
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-wallet font-large-3"></i></p>
-                                <h2>
-                                    Generado en Bs.
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byBsModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="{{ route('report.byCredit') }}">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-credit-card font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Créditos por cobrar.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-chart font-large-3"></i></p>
-                                <h2>
-                                    Comisiones
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byComissionModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byTypeModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-calculator font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Flujo de caja.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-refresh font-large-3"></i></p>
-                                <h2>
-                                    Devoluciones
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byReturnModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byExpensesModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-arrow-down-circle font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Gastos.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="card border-top-3 border-top-indigo">
-                        <div class="card-content collapse show">
-                            <div class="card-body card-dashboard text-center">
-                                <p><i class="icon-share-alt font-large-3"></i></p>
-                                <h2>
-                                    Stock disponible
-                                </h2>
-                                <p>
-                                    <button class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#byStockModal">
-                                        <span class="fa fa-check"></span> Generar
-                                    </button>
-                                </p>
+                    <a href="#" data-toggle="modal" data-target="#byProfitModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-arrow-up-circle font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Ganacias.</h2></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <a href="#" data-toggle="modal" data-target="#byBsModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-wallet font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Generado en Bs.</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#" data-toggle="modal" data-target="#byComissionModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-chart font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Comisiones.</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="indigo">Reportes de stock</h2>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <a href="#" data-toggle="modal" data-target="#byReturnModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-refresh font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Devoluciones.</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#" data-toggle="modal" data-target="#byStockModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-share-alt font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Stock disponible.</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#" data-toggle="modal" data-target="#byStockLogModal">
+                        <div class="card border-grey border-lighten-2">
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard text-center">
+                                    <div class="row align-items-center">
+                                        <div class="col-3"><i class="icon-notebook font-large-3 grey darken-2 text-left"></i></div>
+                                        <div class="col-9"><h2 class="text-left">Cambios en stock.</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -256,6 +255,7 @@
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
         $('.report-modal').css("margin-top", $(window).height() / 4 - ($('.modal-content').height() / 2));
+        $('#byStockLogModal').css("margin-top", ($(window).height() - $('.modal-content').height()) / 5);
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {

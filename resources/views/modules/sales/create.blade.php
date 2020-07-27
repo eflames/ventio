@@ -16,7 +16,7 @@
     @include('partials.alerts')
 
     <div class="app-content content">
-        <div class="content-wrapper">
+        <div class="">
             <div class="content-detached content-left">
                 <div class="content-body"><section class="row">
                         <div class="col-md-12">
@@ -172,7 +172,7 @@
 @stop
 @section('after-scripts')
     <script src="{{ asset('js/bootstrap-editable.min.js') }}"></script>
-    <script src="{{ asset('js/saleAjaxFunctions.js') }}"></script>
+    {{-- <script src="{{ asset('js/saleAjaxFunctions.js') }}"></script> --}}
     <script>
         $('#procSaleModal').css("margin-top", $(window).height() / 4 - 50);
         $('#changePriceModal').css("margin-top", $(window).height() / 4 - 100);

@@ -26,40 +26,36 @@ class ProductController extends Controller
     public function index(){
         try{
             $this->authorize('listInventory', User::class);
-//            $data['products'] = Product::orderBy('id','desc')->with('category')->get();
+           $data['products'] = Product::orderBy('id','desc')->with('category')->paginate(30);
             $this->setSeo('Productos');
-            return view('modules.products.list');
+            return view('modules.products.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
 
-    public function getProducts()
-    {
+    public function getFilteredProducts(Request $request){
         try{
-            $this->authorize('sales', User::class);
-            $products = DB::table('products')
-                ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
-                ->select('products.id as id', 'products.description as description', 'products.identifier as identifier', 'products.name as name', 'product_categories.name as category_name')
-                ->orderBy('products.id', 'desc')
-                ->get();
-
-            return DataTables::of($products)
-//                ->setRowAttr(['align' => 'center'])
-                ->addColumn('actions', 'modules.products.partials.actionButton')
-                ->editColumn('name', function($products) {return '<strong>' . strtoupper($products->name) .'</strong>' ;})
-                ->rawColumns(['actions', 'name'])
-                ->make(true);
+            $this->authorize('listInventory', User::class);
+            $query = $request->searchquery ? : '';
+            if(empty($query)){
+                $data['products'] = Product::orderBy('id','desc')->with('category')->paginate(30);
+            }else{
+                $data['products'] = Product::search(['name', 'identifier'], $query)->with('category')->orderby('id', 'desc')->take(100)->get();
+            }
+            return view('modules.products.partials.recordsTable', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
 
-    public function create(){
+
+    public function create($fs = null){
         try{
             $this->authorize('manageInventory', User::class);
             $data['categories'] = ProductCategory::orderBy('id', 'asc')->pluck('name', 'id');
             $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
+            $data['fs'] = $fs ? 1 : 0;
             $this->setSeo('Productos - nuevo producto');
             return view('modules.products.create', $data);
         }catch (\Exception $e){
@@ -85,9 +81,12 @@ class ProductController extends Controller
                 $stock->save();
                 StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
             }
-    
-            $request->session()->flash('message', "Producto ".$request->name." creado exitosamente");
-            return redirect('productos');
+            if($request->fs){
+                return redirect()->route('stock.list')->with('message', "Producto ".$request->name." creado exitosamente");
+            }else{
+                return redirect()->route('products.list')->with('message', "Producto ".$request->name." creado exitosamente");
+            }
+            
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

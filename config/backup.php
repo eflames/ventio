@@ -102,16 +102,16 @@ return [
      * You can also use your own notification classes, just make sure the class is named after one of
      * the `Spatie\Backup\Events` classes.
      */
-//    'notifications' => [
-//
-//        'notifications' => [
-//            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => ['mail'],
-//            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['mail'],
-//            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => ['mail'],
-//            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => ['mail'],
-//            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => ['mail'],
-//            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => ['mail'],
-//        ],
+   'notifications' => [
+
+       'notifications' => [
+           \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => null,
+           \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => null,
+           \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => null,
+           \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => null,
+           \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => null,
+           \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => null,
+       ],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default
@@ -136,7 +136,7 @@ return [
 //            'icon' => null,
 //
 //        ],
-//    ],
+   ],
 
     /*
      * Here you can specify which backups should be monitored.

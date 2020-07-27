@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\DB;
 use App\Models\Warehouse;
+use App\Models\StockLog;
 
 class ReportController extends Controller
 {
@@ -33,6 +34,7 @@ class ReportController extends Controller
             $data['sellers'] = User::pluck('name', 'id');
             $data['categories'] = ProductCategory::pluck('name', 'id');
             $data['warehouses'] = Warehouse::pluck('name', 'id');
+            $data['users'] = User::pluck('name', 'id');
             return view('modules.reports.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
@@ -257,7 +259,7 @@ class ReportController extends Controller
                 $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
-                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price', 'stock.qty as qty')
                 ->where('stock.qty', '>', 0)
                 ->where('stock.warehouse_id', $request->warehouse_id)
                 ->orderBy('product_categories.name')
@@ -269,7 +271,7 @@ class ReportController extends Controller
                 $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
-                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price', 'stock.qty as qty')
                 ->where('stock.qty', '>', 0)
                 ->orderBy('product_categories.name')
                 ->orderBy('products.name')
@@ -291,7 +293,7 @@ class ReportController extends Controller
                 $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
-                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price', 'stock.qty as qty')
                 ->where('stock.qty', '>', 0)
                 ->where('stock.warehouse_id', $request->warehouse_id)
                 ->orderBy('product_categories.name')
@@ -303,7 +305,7 @@ class ReportController extends Controller
                 $data['items'] = DB::table('stock')
                 ->join('products', 'products.id', '=', 'stock.product_id')
                 ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
-                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price')
+                ->select('products.name as name', 'product_categories.name as category', 'stock.price as price', 'stock.qty as qty')
                 ->where('stock.qty', '>', 0)
                 ->orderBy('product_categories.name')
                 ->orderBy('products.name')
@@ -575,6 +577,7 @@ class ReportController extends Controller
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
+
     public function generateByCategoryPdf(Request $request)
     {
         try{
@@ -653,6 +656,62 @@ class ReportController extends Controller
             $data['items'] = Stock::whereRaw("qty <= min_stock")->get();
             $pdf = PDF::loadView('modules.stock.minStockReportTemplate', $data);
             return $pdf->download('Reporte - Stock minimo - '.date('dmY').'.pdf');
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function generateByStockLog(Request $request){
+        try{
+            $this->authorize('reports', User::class);
+            $this->setSeo('Reporte de cambios en el inventario');
+            $date_from = $request->date_from ? Carbon::createFromFormat('Y-m-d H:i:s', $request->date_from. ' 00:00:01') : '2019-01-01 00:00:01';
+            $date_to = $request->date_to ? Carbon::createFromFormat('Y-m-d H:i:s', $request->date_to. ' 23:59:59') : Carbon::now();
+            $data['date_from'] = $date_from;
+            $data['date_to'] = $date_to;
+            $data['created_by'] = $request->created_by;
+            $data['product_id'] = $request->product_id;
+            $data['logs'] = StockLog::whereBetween('created_at',[$date_from, $date_to])
+            ->whereNested(function($query) use($request)
+                {
+                    if($request->user_id){
+                        $query->where('created_by', $request->user_id);
+                    }
+                    if($request->product_id){
+                        $query->where('product_id', $request->product_id);
+                    }
+                })
+            ->orderBy('id', 'DESC')->get();
+            return view('modules.reports.byStockLogEmbed',$data);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+
+    public function generateByStockLogPdf(Request $request)
+    {
+        try{
+            $this->authorize('reports', User::class);
+            $this->setSeo('Reporte de cambios en el inventario');
+            $date_from = $request->date_from;
+            $date_to = $request->date_to;
+            $data['date_from'] = $date_from;
+            $data['date_to'] = $date_to;
+            $data['created_by'] = $request->created_by;
+            $data['product_id'] = $request->product_id;
+            $data['logs'] = StockLog::whereBetween('created_at',[$date_from, $date_to])
+            ->whereNested(function($query) use($request)
+                {
+                    if($request->user_id){
+                        $query->where('created_by', $request->user_id);
+                    }
+                    if($request->product_id){
+                        $query->where('product_id', $request->product_id);
+                    }
+                })
+            ->orderBy('id', 'DESC')->get();
+            $pdf = PDF::loadView('modules.reports.templates.byStockLog', $data);
+            return $pdf->download('Reporte - Ventas por categoria - '.date('dmY').'.pdf');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

@@ -59,6 +59,7 @@
                                     <span class="login_version">{{ config('ventio.VERSION') }}</span>
                                 </div>
                             </div>
+                            @include('partials.alerts')
                             <div class="card-content">
                                 <div class="card-body">
                                     <form method="POST" action="{{ route('login') }}">
@@ -109,5 +110,6 @@
         var switchery = new Switchery(html);
     });
 </script>
+@yield('after-scripts')
 </body>
 </html>

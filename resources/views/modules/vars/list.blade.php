@@ -9,7 +9,27 @@
 @section('content')
 @include('modules.vars.newVarModal')
 @include('modules.vars.editVarModal')
-@include('partials.alerts')
+@include('modules.vars.partials.wooCommerceModal')
+
+
+@if(session()->has('message'))
+    <div id="messageBar" class="alert alert-icon-left alert-success alert-dismissible mb-2 alert-arrow-left" role="alert">
+        <span class="alert-icon"><i class="fa fa-check"></i></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        {!!  session()->pull('message') !!}
+    </div>
+@endif
+@if(session()->has('error'))
+    <div class="alert alert-icon-left alert-danger alert-dismissible mb-2 alert-arrow-left" role="alert">
+        <span class="alert-icon"><i class="fa fa-warning"></i></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        {!! session()->pull('error') !!}
+    </div>
+@endif
 
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -18,7 +38,8 @@
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-                        <li class="breadcrumb-item">Configuración</li>
+                        <li class="breadcrumb-item"><a href="{{ route('config.general') }}">Configuración general</a></li>
+                        <li class="breadcrumb-item">Avanzado</li>
                     </ol>
                 </div>
             </div>
@@ -41,7 +62,7 @@
     <div class="content-body">
         <section id="configuration">
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <div class="card border-top-3 border-top-pink">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard text-center">
@@ -62,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <div class="card border-top-3 border-top-pink">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard text-center">
@@ -85,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <div class="card border-top-3 border-top-pink">
                         <div class="card-content collapse show">
                             <div class="card-body card-dashboard text-center">
@@ -99,6 +120,24 @@
                                         <span class="fa fa-check"></span> Iniciar
                                     </a>
                                  
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card border-top-3 border-top-pink">
+                        <div class="card-content collapse show">
+                            <div class="card-body card-dashboard text-center">
+                                <p><i class="fa fa-wordpress fa-4x"></i></p>
+                                <h2>
+                                    Exportar a WooCommerce
+                                </h2>
+                                <p>Descarga un archivo CSV con todos los productos agregados actualmente para importar en WooCommerce.</p>
+                                <p>
+                                    <a href="#" class="btn btn-pink btn-lg" data-toggle="modal" data-target="#WooCommerceModal">
+                                        <span class="fa fa-download"></span> Exportar
+                                    </a>
                                 </p>
                             </div>
                         </div>
@@ -128,22 +167,24 @@
                                                 <td class="align-middle text-center">{{ $var->description }}</td>
                                                 <td class="align-middle text-center">{{ $var->value }}</td>
                                                 <td class="text-center align-middle">
-                                                    {{ Form::open(['url' => 'variables-de-configuracion/'.$var->id, 'method' => 'delete', 'id'=>'formelim-'.$var->id]) }}
-                                                        <button type="button" data-key="{{ $var->key }}"
-                                                                data-description="{{ $var->description }}"
-                                                                data-value="{{ $var->value }}"
-                                                                data-var_id="{{ $var->id }}"
-                                                                class="btn btn-blue btn-sm"
-                                                                data-toggle="modal" data-target="#editVarModal"
-                                                                data-tooltip="tooltip" data-placement="left" title="Editar">
-                                                            <span class="fa fa-pencil"></span>
+                                                    @if($var->key != 'store_name')
+                                                        {{ Form::open(['url' => 'variables-de-configuracion/'.$var->id, 'method' => 'delete', 'id'=>'formelim-'.$var->id]) }}
+                                                            <button type="button" data-key="{{ $var->key }}"
+                                                                    data-description="{{ $var->description }}"
+                                                                    data-value="{{ $var->value }}"
+                                                                    data-var_id="{{ $var->id }}"
+                                                                    class="btn btn-blue btn-sm"
+                                                                    data-toggle="modal" data-target="#editVarModal"
+                                                                    data-tooltip="tooltip" data-placement="left" title="Editar">
+                                                                <span class="fa fa-pencil"></span>
+                                                            </button>
+                                                        <button type="button" onclick="alertElim('{{$var->id}}')"
+                                                                class="btn btn-danger btn-sm"
+                                                                data-tooltip="tooltip" data-placement="right" title="Eliminar">
+                                                            <span class="fa fa-times"></span>
                                                         </button>
-                                                    <button type="button" onclick="alertElim('{{$var->id}}')"
-                                                            class="btn btn-danger btn-sm"
-                                                            data-tooltip="tooltip" data-placement="right" title="Eliminar">
-                                                        <span class="fa fa-times"></span>
-                                                    </button>
                                                     {{ Form::close() }}
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
@@ -178,6 +219,7 @@
     <script src="{{ asset('js/switchery.min.js') }}"></script>
     <script>
         $('.modal-conf').css("margin-top", 55);
+        $('#WooCommerceModal').css("margin-top", $(window).height() / 4 - ($('.modal-content').height() / 2));
 
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 

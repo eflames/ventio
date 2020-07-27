@@ -9,58 +9,64 @@
 
 
 @if (count($errors) > 0)
-    <div class="alert alert-icon-left alert-danger alert-dismissible mb-2 alert-arrow-left" role="alert">
-        <span class="alert-icon"><i class="fa fa-warning"></i></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-
-            @foreach ($errors->all() as $error)
-                {{ $error }}<br>
-            @endforeach
-
-    </div>
+    @section('after-scripts')
+    @parent
+        @foreach ($errors->all() as $error)
+                <script> 
+                    toastr.error("<?php echo $error; ?>", "Ha ocurrido un error", { progressBar: !0 });
+                </script>
+        @endforeach
+    @endsection
 @endif
 
 @if(@$message)
-    <div id="messageBar" class="alert alert-icon-left alert-success alert-dismissible mb-2 alert-arrow-left" role="alert">
-        <span class="alert-icon"><i class="fa fa-check"></i></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        {{$message}}
-    </div>
+    @section('after-scripts')
+    @parent
+        <script> 
+            toastr.success("<?php echo $message; ?>", "Completado", { progressBar: !0 });
+        </script>
+    @endsection
 @endif
 
 @if(session()->has('message'))
-    <div class="alert alert-icon-left alert-success alert-dismissible mb-2 alert-arrow-left" role="alert">
-        <span class="alert-icon"><i class="fa fa-check"></i></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        {!! session()->pull('message') !!}
-    </div>
+    @section('after-scripts')
+    @parent
+        <script>
+            toastr.success("<?php echo session()->pull('message'); ?>", "Completado", { progressBar: !0 });
+        </script>
+    @endsection
 @endif
 
 @if(session()->has('warning'))
-    <div class="alert alert-icon-left alert-warning alert-dismissible mb-2 alert-arrow-left" role="alert">
-        <span class="alert-icon"><i class="fa fa-exclamation-circle"></i></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        {!! session()->pull('warning') !!}
-    </div>
+    @section('after-scripts')
+    @parent
+        <script>
+            toastr.warning("<?php echo session()->pull('warning'); ?>", "Aviso", { progressBar: !0 });
+        </script>
+    @endsection
+@endif
+
+@if(session()->has('info'))
+    @section('after-scripts')
+    @parent
+        <script>
+            toastr.info("<?php echo session()->pull('info'); ?>", "Aviso", { progressBar: !0 });
+        </script>
+    @endsection
 @endif
 
 @if(session()->has('error'))
-    <div class="alert alert-icon-left alert-danger alert-dismissible mb-2 alert-arrow-left" role="alert">
-        <span class="alert-icon"><i class="fa fa-warning"></i></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        {{ session()->pull('error') }}
-    </div>
+    @section('after-scripts')
+    @parent
+        <script>
+            toastr.error("<?php echo session()->pull('error'); ?>", "Ha ocurrido un error", { progressBar: !0 });
+        </script>
+    @endsection
 @endif
+
+
+
+
 <div id="messageBar" class="alert alert-icon-left alert-success alert-dismissible mb-2 alert-arrow-left"
      role="alert" style="display: none">
     <span class="alert-icon"><i class="fa fa-check"></i></span>

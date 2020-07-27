@@ -19,7 +19,7 @@
     <div class="col-6">
         <fieldset class="form-group form-group-style">
             <label for="id_number" class="filled">Cédula de identidad: <span class="text-danger">*</span></label>
-            {{ Form::number('id_number', null, ['class' => 'form-control']) }}
+            {{ Form::text('id_number', null, ['class' => 'form-control', 'maxlength' => 8]) }}
             @if ($errors->has('id_number'))
                 <p class="badge-default badge-danger block-tag text-center"><small class="block-area white">{{ $errors->first('id_number') }}</small></p>
             @endif
@@ -39,7 +39,7 @@
     <div class="col-6">
         <fieldset class="form-group form-group-style">
             <label for="telephone" class="filled">Teléfono: <span class="text-danger">*</span></label>
-            {{ Form::text('telephone', null, ['class' => 'form-control']) }}
+            {{ Form::text('telephone', null, ['class' => 'form-control', 'maxlength' => 11]) }}
             @if ($errors->has('telephone'))
                 <p class="badge-default badge-danger block-tag text-center"><small class="block-area white">{{ $errors->first('telephone') }}</small></p>
             @endif

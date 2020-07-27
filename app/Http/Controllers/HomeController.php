@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
 use App\Libraries\ChartUtils;
+use App\Libraries\LicenseUtils;
 use App\Models\Deposit;
 use App\Models\Loan;
+use App\Models\LoanPayment;
 use App\Models\Sale;
 use App\Traits\SEO;
 use App\User;
@@ -38,11 +40,18 @@ class HomeController extends Controller
             $data['soldItems'] = $quantity;
             $data['sales'] = Sale::orderBy('id', 'desc')->where('sale_status_id', 2)->take(7)
                 ->with('details')->with('client')->get();
-            $data['loansTotal'] = Loan::where('closed', 0)->sum('amount');
+            $loansTotal = Loan::where('closed', 0)->sum('amount');
+            $loansPaymentsTotal = LoanPayment::whereHas('loan', function($q){
+                $q->where('closed', 0);
+            })->sum('amount');
+            $data['loansTotal'] = $loansTotal - $loansPaymentsTotal;
             $data['depositsTotal'] = Deposit::where('claimed')->sum('amount');
             $minStock_alert = Stock::whereRaw("qty <= min_stock")->get();
-            if($minStock_alert->count() > 1){
+            if($minStock_alert->count() > 0){
                 $request->session()->flash('warning', 'Uno o más productos estan por debajo del stock mínimo.');
+            }
+            if(LicenseUtils::warning()){
+                $request->session()->flash('info', 'La licencia está por vencer. Adquiera una nueva licencia y actualice en la seccion de configuración.');
             }
             $data += $chartUtils->getChartData();
             return view('modules.home.dashboard', $data);

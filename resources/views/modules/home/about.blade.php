@@ -36,7 +36,29 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <h4 class="pink">v1.6.1RC <small class="grey">20/05/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <h4 class="pink">v1.7.0 <small class="grey">19/07/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <ul>
+                                                    <li>First official release. RC removed.</li>
+                                                    <li>Ventio now has licensing method.</li>
+                                                    <li>New logo and colors.</li>
+                                                    <li>Change notification bars to toastr notifications</li>
+                                                    <li>Improved search method</li>
+                                                    <li>New live searchbar system in sales, clients, products & stock (no longer using datatables)</li>
+                                                    <li>Added button in stock list to create products</li>
+                                                    <li>Added limit in client fields (ID and Telephone)</li>
+                                                    <li>Added quantity column in stock reports</li>
+                                                    <li>Fix credits number in dashboard</li>
+                                                    <li>Improved loading effects in buttons</li>
+                                                    <li>New reports view design with category</li>
+                                                    <li>New stock log report added</li>
+                                                    <li>Added CSV exports to WooCommerce</li>
+                                                    <li>UI improves and fixes</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="pink">v1.6.1RC <small class="grey">20/05/2020</small></h4>
                                                 <ul>
                                                     <li>Fixed stock log doesn't store changes when adding stock from products</li>
                                                     <li>Fixed pagination when filtering logs</li>
@@ -53,8 +75,8 @@
                                                     <li>Added filter by User, product and date in stock log</li>
                                                     <li>Added button to change warehouse inside sale</li>
                                                     <li>Added warehouse filter for Stock Reports</li>
-                                                    <li>Fixed filtered stock view win ajax loading</li>
-                                                    <li>Fixed clients view win ajax loading</li>
+                                                    <li>Fixed filtered stock view in ajax loading</li>
+                                                    <li>Fixed clients view in ajax loading</li>
                                                     <li>New and simplified view of configuration screen</li>
                                                     <li>Added accounts maintenance in configuration</li>
                                                     <li>Added custom logo capability</li>
@@ -326,7 +348,7 @@
                                             <div class="col-12">
                                                 <h4>Horas invertidas hasta <strong>{{ config('ventio.VERSION') }}</strong></h4>
                                                 <ul>
-                                                    <li><strong>279</strong> horas de desarollo</li>
+                                                    <li><strong>299</strong> horas de desarollo</li>
                                                 </ul>
                                             </div>
                                         </div>

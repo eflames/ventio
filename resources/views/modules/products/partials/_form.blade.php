@@ -24,6 +24,7 @@
                 <fieldset class="form-group form-group-style">
                     <label for="name" class="filled">Nombre: <span class="text-danger">*</span></label>
                     {{ Form::text('name', null, ['class' => 'form-control']) }}
+                    {{ Form::hidden('fs', $fs ?? 0) }}
                     @if ($errors->has('name'))
                         <p class="badge-default badge-danger block-tag text-center"><small class="block-area white">{{ $errors->first('name') }}</small></p>
                     @endif

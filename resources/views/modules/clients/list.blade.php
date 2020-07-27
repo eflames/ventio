@@ -13,7 +13,7 @@
     @include('partials.alerts')
 
     <div class="content-header row">
-        <div class="content-header-left col-md-6 col-12 mb-2">
+        <div class="content-header-left col-md-4 col-12 mb-2">
             <h3 class="content-header-title"><i class="icon-user-following"></i> Clientes</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
@@ -24,8 +24,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4 col-12 mb-2">
+            <fieldset class="form-group position-relative has-icon-left">
+                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por nombre, cédula o teléfono', 'id' => 'searchField', 'data-url' => route('api.getClients')]) }}
+                <div class="form-control-position">
+                    <i class="icon-magnifier grey"></i>
+                </div>
+            </fieldset>
+        </div>
         @can('manageClients', \App\User::class)
-            <div class="content-header-right col-md-6 col-12">
+            <div class="content-header-right col-md-4 col-12">
                 <div class="media width-250 float-right">
                     <div class="media-body media-right text-right">
                         <a href="{{ route('clients.create') }}" class="btn btn-cyan btn-lg">
@@ -42,8 +50,9 @@
                 <div class="col-12">
                     <div class="card border-top-3 border-top-cyan">
                         <div class="card-content collapse show">
+                            <div id="loadSpinner" class="text-center"><span class="fa fa-spinner fa-spin fa-2x"></span></div>
                             <div class="card-body card-dashboard">
-                                <table id="datatable-spanish-clients" class="table table-striped table-bordered table-borderless">
+                                <table class="table table-bordered table-borderless">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Nombre</th>
@@ -53,6 +62,9 @@
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                     </thead>
+                                    <tbody id="recordsTable">
+                                        @include('modules.clients.partials.recordsTable')
+                                    </tbody>
                                     <tfoot>
                                     <tr>
                                         <th class="text-center">Nombre</th>
@@ -63,6 +75,9 @@
                                     </tr>
                                     </tfoot>
                                 </table>
+                                <div class="float-right">
+                                    {{ $clients->render() }}
+                                </div>
                             </div>
                         </div>
                     </div>

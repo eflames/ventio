@@ -27,89 +27,40 @@ class StockController extends Controller
     public function index($slug = null){
         try{
             $this->authorize('listInventory', User::class);
+            if($slug){
+                $warehouse = Warehouse::where('slug', $slug)->first();
+                $data['stock'] = Stock::orderBy('id', 'desc')->with('warehouse')->with('product')->where('warehouse_id', $warehouse->id)->paginate(30);
+            }else{
+                $data['stock'] = Stock::orderBy('id', 'desc')->with('warehouse')->with('product')->paginate(30);
+            }
             $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
             $data['wares'] = Warehouse::orderBy('id','desc')->get();
             $data['slug'] = $slug;
-            $data['stock'] = Stock::orderBy('id', 'desc')->paginate(10);
             $this->setSeo('Stock');
             return view('modules.stock.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
-
-    public function getStock()
+    
+    public function getFilteredStock(Request $request)
     {
         try{
-            $this->authorize('sales', User::class);    
-            $stock = DB::table('stock')
-                ->join('products', 'stock.product_id', '=', 'products.id')
-                ->join('warehouses', 'stock.warehouse_id', '=', 'warehouses.id')
-                ->select('stock.id', 'products.identifier', 'products.name','stock.qty', 'warehouses.name as warehouse',
-                    'stock.price as price', 'stock.cost_price', 'warehouses.id as warehouseid', 'products.id as productid', 'stock.min_stock')
-                ->orderBy('stock.id', 'desc')
-                ->get();
-
-            return DataTables::of($stock)
-                ->setRowAttr(['align' => 'center'])
-                ->addColumn('actions', 'modules.stock.partials.actionButtons')
-                ->editColumn('qty', function($stock) {
-                    if($stock->qty == 0){
-                        $data = '<div class="badge badge-md badge-danger"><strong>'. $stock->qty . '</strong></div>';
-                    }elseif($stock->qty <= $stock->min_stock){
-                        $data = '<div class="badge badge-md badge-warning"><strong>'. $stock->qty . '</strong></div>';
-                    }else{
-                        $data = '<div class="badge badge-md badge-success"><strong>'. $stock->qty . '</strong></div>';
-                    }
-                    return $data;
-                })
-                ->editColumn('price', function($stock) {return '$'.number_format($stock->price, 2) ;})
-                ->editColumn('cost_price', function($stock) {return '$'.number_format($stock->cost_price, 2) ;})
-                ->editColumn('name', function($stock) {return '<strong>' . strtoupper($stock->name) .'</strong>' ;})
-                ->rawColumns(['actions', 'qty', 'name'])
-                ->make(true);
+            $this->authorize('listInventory', User::class);
+            $query = $request->searchquery ? : '';
+            if(empty($query)){
+                $data['stock'] = Stock::orderBy('id', 'desc')->paginate(30);
+            }else{
+                $data['stock'] = Stock::search(['product.identifier', 'product.name'], $query)->orderby('id', 'desc')->take(100)->get();
+            }
+            
+            return view('modules.stock.partials.recordsTable', $data);
+            // return json_encode($sales);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
 
-    public function getStockFiltered($slug)
-    {
-        try{
-            $this->authorize('sales', User::class);
-            $warehouse = Warehouse::where('slug', $slug)->first();
-            $stock = DB::table('stock')
-                ->join('products', 'stock.product_id', '=', 'products.id')
-                ->join('warehouses', 'stock.warehouse_id', '=', 'warehouses.id')
-                ->select('stock.id', 'products.identifier', 'products.name','stock.qty', 'warehouses.name as warehouse',
-                    'stock.price as price', 'stock.cost_price', 'warehouses.id as warehouseid', 'products.id as productid', 'stock.min_stock as min_stock')
-                ->where('warehouse_id', $warehouse->id)
-                ->orderBy('stock.id', 'desc')
-                ->get();
-
-
-            return DataTables::of($stock)
-                ->setRowAttr(['align' => 'center'])
-                ->addColumn('actions', 'modules.stock.partials.actionButtons')
-                ->editColumn('qty', function($stock) {
-                    if($stock->qty == 0){
-                        $data = '<div class="badge badge-md badge-danger"><strong>'. $stock->qty . '</strong></div>';
-                    }elseif($stock->qty <= $stock->min_stock){
-                        $data = '<div class="badge badge-md badge-warning"><strong>'. $stock->qty . '</strong></div>';
-                    }else{
-                        $data = '<div class="badge badge-md badge-success"><strong>'. $stock->qty . '</strong></div>';
-                    }
-                    return $data;
-                })
-                ->editColumn('price', function($stock) {return '$'.number_format($stock->price, 2) ;})
-                ->editColumn('cost_price', function($stock) {return '$'.number_format($stock->cost_price, 2) ;})
-                ->editColumn('name', function($stock) {return '<strong>' . strtoupper($stock->name) .'</strong>' ;})
-                ->rawColumns(['actions', 'qty', 'name'])
-                ->make(true);
-        }catch (\Exception $e){
-            return view('errors.exception')->with('error', $e->getMessage());
-        }
-    }
 
     public function showLog(){
         try{
@@ -207,7 +158,7 @@ class StockController extends Controller
             StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
             $msg = 'Se ha agregado un nuevo stock para <strong>'.$product->name. '</strong> en el almacén <strong>'.$warehouse->name.'</strong>';
             $request->session()->flash('message', $msg);
-            return redirect()->back();
+            return redirect()->route('stock.list'); 
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -221,7 +172,7 @@ class StockController extends Controller
             $stock->cost_price = $request->cost_price;
             $stock->save();
             $request->session()->flash('message', "Precio de <strong>".$request->name."</strong> actualizado exitosamente");
-            return redirect()->back();
+            return redirect()->route('stock.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -234,7 +185,7 @@ class StockController extends Controller
             $stock->min_stock = $request->min_stock;
             $stock->save();
             $request->session()->flash('message', "Stock minimo de <strong>".$request->name."</strong> actualizado exitosamente");
-            return redirect()->back();
+            return redirect()->route('stock.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -248,7 +199,7 @@ class StockController extends Controller
             $stock->save();
             StockUtils::log($stock->product_id, 'Agregó a <strong>'. $stock->warehouse->name .' (' . $request->qty.')</strong> unidades');
             $request->session()->flash('message', $request->qty." unidades añadidas para <strong>".$request->name."</strong> exitosamente");
-            return redirect()->back();
+            return redirect()->route('stock.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -283,7 +234,7 @@ class StockController extends Controller
             $warehouse = Warehouse::find($request->warehouse_id);
             $msg = '<strong>'.$request->qty.'</strong> unidades transferidas de: <strong>'.strtoupper($request->name).'</strong> desde <strong> '.$request->warehousename.' </strong>hacia<strong> '.strtoupper($warehouse->name).'</strong>';
             $request->session()->flash('message', $msg);
-            return redirect()->back();
+            return redirect()->route('stock.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -304,7 +255,7 @@ class StockController extends Controller
             $result = $importer->result();
             $request->session()->flash('message', "Archivo importado - <a data-toggle='modal' data-target='#logModal'><strong>VER LOG</strong></a>");
             $request->session()->flash('results', $result);
-            return redirect()->back();
+            return redirect()->route('stock.list');
 
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
@@ -322,7 +273,7 @@ class StockController extends Controller
                 $request->session()->flash('error','Ha ocurrido un error inesperado, por favor contacte a los 
                 administradores del sistema.');
             }
-            return redirect()->back();
+            return redirect()->route('stock.list');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

@@ -65,15 +65,17 @@
 <section class="datos">
     <table border="1" cellspacing="0" cellpadding="0">
         <tr>
-            <td colspan="3" class="subtitulo">Productos disponibles</td>
+            <td colspan="4" class="subtitulo">Productos disponibles</td>
         </tr>
         <tr class="descripcion">
+            <th>Disp</th>
             <th>Artículo</th>
             <th>Categoría</th>
             <th class="right">Precio</th>
         </tr>
         @foreach($items as $item)
             <tr class="datos">
+                <td>{{ $item->qty }}</td>
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->category }}</td>
                 <td class="right">

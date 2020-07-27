@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth','isActive']], function(){
         'create' => 'products.create',
         'edit' => 'products.edit'
         ]);
+    Route::get('productos/create/{fs}', 'ProductController@create')->name('products.createfs');
     Route::get('products-dt', 'ProductController@getProducts');
     Route::post('stock/csv-import', 'StockController@importCSV');
     Route::post('stock/editPrice', 'StockController@editPrice');
@@ -144,16 +145,22 @@ Route::group(['middleware' => ['auth','isActive']], function(){
     Route::get('reporte/stock-pdf', 'ReportController@generateByStockPdf')->name('report.byStockPdf');
     Route::post('reporte/devoluciones-pdf', 'ReportController@generateByReturnPdf')->name('report.byReturnPdf');
     Route::post('reporte/devoluciones', 'ReportController@generateByReturn')->name('report.byReturn');
+    Route::post('reporte/cambios-log', 'ReportController@generateByStockLog')->name('report.byStockLog');
+    Route::post('reporte/cambios-log-pdf', 'ReportController@generateByStockLogPdf')->name('report.byStockLogPdf');
     Route::get('miperfil', 'HomeController@profile')->name('profile.edit');
     Route::post('miperfil', 'HomeController@storeProfile')->name('profile.store');
     Route::get('sistema', 'SystemController@index')->name('system.index');
     Route::get('sistema/backup-db', 'SystemController@dbbackup')->name('system.db');
+    Route::get('sistema/export-to-woocommerce', 'SystemController@exportToWoocommerce')->name('system.woo');
+    Route::post('sistema/license', 'SystemController@setLicense')->name('system.license');
     Route::get('acerca-de-ventio', 'HomeController@about')->name('system.about');
 
 
 });
 
 // Authentication Routes...
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login')->middleware('validHash');
+Route::post('login', 'Auth\LoginController@login')->middleware('validHash');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('license', 'SystemController@showLicenseForm')->name('licenseForm');
+Route::post('license', 'SystemController@installLicense')->name('installLicense');

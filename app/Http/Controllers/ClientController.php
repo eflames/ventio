@@ -23,7 +23,24 @@ class ClientController extends Controller
     public function index(){
         try{
             $this->authorize('listClients', User::class);
-            return view('modules.clients.list');
+            $data['clients'] = Client::orderBy('id', 'desc')->paginate(30);
+            return view('modules.clients.list', $data);
+        }catch (\Exception $e){
+            return view('errors.exception')->with('error', $e->getMessage());
+        }
+    }
+    use SEO;
+
+    public function getFilteredClients(Request $request){
+        try{
+            $this->authorize('listClients', User::class);
+            $query = $request->searchquery ? : '';
+            if(empty($query)){
+                $data['clients'] = Client::orderBy('id', 'desc')->paginate(30);
+            }else{
+                $data['clients'] = Client::search(['name', 'telephone', 'email'], $query)->orderby('id', 'desc')->take(100)->get();
+            }
+            return view('modules.clients.partials.recordsTable', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
@@ -33,9 +50,8 @@ class ClientController extends Controller
     public function create(){
         try{
             $this->authorize('manageClients', User::class);
-            $data['clients'] = Client::orderBy('id', 'desc');
             $this->setSeo('Clientes - nuevo cliente');
-            return view('modules.clients.create', $data);
+            return view('modules.clients.create');
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

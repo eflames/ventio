@@ -19,7 +19,6 @@ use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\Facades\DataTables;
 use App\Models\Warehouse;
 
 class SaleController extends Controller
@@ -477,43 +476,24 @@ class SaleController extends Controller
         try{
             $this->authorize('sales', User::class);
             $this->setSeo('Ventas registradas');
-            return view('modules.sales.list');
+            $data['sales'] = Sale::orderBy('id', 'desc')->with('client')->with('details')->with('status')->paginate(30);
+            return view('modules.sales.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
-    public function getSales()
+    public function getFilteredSales(Request $request)
     {
         try{
             $this->authorize('sales', User::class);
-            $sales = DB::table('sales')
-                ->join('clients', 'sales.client_id', '=', 'clients.id')
-                ->join('sale_status', 'sales.sale_status_id', '=', 'sale_status.id')
-                ->leftJoin('sale_details', 'sales.id', '=', 'sale_details.sale_id')
-                ->select('sales.id as id', 'clients.name as client','clients.id_number as id_number', 'sales.amount as amount',
-                    'sale_status.name as status', 'sales.closed_at as closed_at', DB::raw('SUM(sale_details.qty) as qty'))
-                ->groupBy('sales.id')
-                ->orderBy('id', 'desc')
-                ->get();
-
-
-            return DataTables::of($sales)
-                ->setRowAttr(['align' => 'center'])
-                ->editColumn('client', function($sales) {return '<strong><a href="'.route('client.details', ['id_number' => $sales->id_number]).'">'.strtoupper($sales->client).'</a></strong>';})
-                ->editColumn('closed_at', function($sales) {
-                    if($sales->closed_at){
-                        return date('d/m/Y', strtotime($sales->closed_at));
-                    }else{
-                        return '<span class="text-danger">Ver detalle</span>';
-                    }
-
-                })
-                ->editColumn('amount', function($sales) {return '<strong>$'.number_format($sales->amount, 2).'</strong>';})
-                ->editColumn('id', function($sales) {return '<a href="'.route('sale.view', ['id' => base64_encode($sales->id)]).'">#'.$sales->id.'</a>';})
-                ->editColumn('status', 'modules.sales.partials._statusData')
-                ->addColumn('actions', 'modules.sales.partials.actionButton')
-                ->rawColumns(['status', 'actions', 'amount', 'id', 'client', 'closed_at'])
-                ->make(true);
+            $query = $request->searchquery ? : '';
+            if(empty($query)){
+                $data['sales'] = Sale::orderBy('id', 'desc')->paginate(30);
+            }else{
+                $data['sales'] = Sale::search(['id', 'client.name', 'amount', 'closed_at'], $query)->orderby('id', 'desc')->take(100)->get();
+            }
+            return view('modules.sales.partials.recordsTable', $data);
+            // return json_encode($sales);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }

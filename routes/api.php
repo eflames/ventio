@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => ['auth','isActive']], function (){
+    Route::post('ventas/all', 'SaleController@getFilteredSales')->name('api.getSales');
+    Route::post('stock/all', 'StockController@getFilteredStock')->name('api.getStock');
+    Route::post('clients/all', 'ClientController@getFilteredClients')->name('api.getClients');
+    Route::post('productos/all', 'ProductController@getFilteredProducts')->name('api.getProducts');
     Route::get('productos', 'ProductController@APIgetall')->name('api.products');
     Route::get('productos-stock', 'ProductController@APIgetallForSale')->name('api.productsforsale');
     Route::get('clientes', 'ClientController@APIgetall')->name('api.clients');

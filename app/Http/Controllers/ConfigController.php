@@ -11,7 +11,9 @@ use App\Traits\SEO;
 use App\Libraries\ImageUtil;
 use App\Models\Loan;
 use App\Models\Deposit;
-
+use App\Models\License;
+use App\Models\ProductCategory;
+use Illuminate\Support\Carbon;
 
 class ConfigController extends Controller
 {
@@ -22,6 +24,7 @@ class ConfigController extends Controller
         try{
             $this->authorize('config', User::class);
             $data['vars'] = Config::orderBy('id','desc')->get();
+            $data['categories'] = ProductCategory::pluck('name', 'id');
             $this->setSeo('Configuración avanzada');
             return view('modules.vars.list', $data);
         }catch (\Exception $e){
@@ -34,6 +37,10 @@ class ConfigController extends Controller
         try{
             $this->authorize('config', User::class);
             $data['vars'] = Config::orderBy('id','desc')->get();
+            $data['license'] = License::findOrFail(1);
+            $section = explode('-', decrypt($data['license']->value));
+            $data['licenseDate'] = Carbon::createFromFormat('d/m/Y', $section[2]);
+            $data['licenseOwner'] = $section[0];
             $this->setSeo('Configuración general');
             return view('modules.vars.general', $data);
         }catch (\Exception $e){
@@ -115,9 +122,9 @@ class ConfigController extends Controller
     public function setStore(Request $request){
         try{
             $this->authorize('config', User::class);
-            $name = Config::where('key', 'store_name')->first();
-            $name->value = $request->store_name;
-            $name->save();
+            // $name = Config::where('key', 'store_name')->first();
+            // $name->value = $request->store_name;
+            // $name->save();
             $email = Config::where('key', 'store_email')->first();
             $email->value = $request->store_email;
             $email->save();
@@ -140,5 +147,7 @@ class ConfigController extends Controller
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
+
+
 
 }

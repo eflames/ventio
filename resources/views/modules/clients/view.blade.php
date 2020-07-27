@@ -163,7 +163,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4"><h3>No hay resultados</h3></td>
+                                            <td colspan="4" class="text-center"><h3>No hay resultados</h3></td>
                                         </tr>
                                     @endforelse
 
@@ -247,7 +247,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4"><h3>No hay resultados</h3></td>
+                                            <td colspan="4" class="text-center"><h3>No hay resultados</h3></td>
                                         </tr>
                                     @endforelse
 

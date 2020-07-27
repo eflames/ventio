@@ -47,6 +47,7 @@
                                 <table class="table table-striped table-bordered table-borderless">
                                     <thead>
                                         <tr>
+                                            <th>Disp.</th>
                                             <th>Artículo</th>
                                             <th>Categoría</th>
                                             <th class="text-right">Precio</th>
@@ -55,6 +56,7 @@
                                     <tbody>
                                     @foreach($items as $item)
                                         <tr>
+                                            <td>{{ $item->qty }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->category }}</td>
                                             <td class="text-right">
