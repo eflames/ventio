@@ -15,27 +15,40 @@ use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 class StockController extends Controller
 {
     use SEO;
 
-    public function index($slug = null){
+    public function index(Request $request){
         try{
             $this->authorize('listInventory', User::class);
-            if($slug){
-                $warehouse = Warehouse::where('slug', $slug)->first();
-                $data['stock'] = Stock::orderBy('id', 'desc')->with('warehouse')->with('product')->where('warehouse_id', $warehouse->id)->paginate(30);
-            }else{
-                $data['stock'] = Stock::orderBy('id', 'desc')->with('warehouse')->with('product')->paginate(30);
+            $query = $request->searchquery ? : '';
+            $almacen = $request->almacen ? : '';
+            // dd($slug);
+            $data['stock'] = Stock::search(['product.identifier', 'product.name'], $query)
+            ->whereNested(function($query) use($almacen)
+            {
+                if($almacen){
+                    $warehouse = Warehouse::where('slug', $almacen)->pluck('id')->first() ?: '';
+                    $query->where('warehouse_id', $warehouse);
+                }
+            })->orderby('id', 'desc')->paginate(30);
+
+            if($query){
+                $data['stock']->appends(['searchquery' => $request->searchquery]);
+            }
+            if($almacen){
+                $data['stock']->appends(['almacen' => $almacen]);
+            }
+
+            if ($request->ajax()) {
+                return view('modules.stock.partials.recordsTable', $data)->render();
             }
             $data['warehouses'] = Warehouse::orderBy('id','desc')->get()->pluck('name', 'id');
             $data['wares'] = Warehouse::orderBy('id','desc')->get();
-            $data['slug'] = $slug;
+            $data['almacen'] = $almacen;
             $this->setSeo('Stock');
             return view('modules.stock.list', $data);
         }catch (\Exception $e){
@@ -43,23 +56,25 @@ class StockController extends Controller
         }
     }
     
-    public function getFilteredStock(Request $request)
-    {
-        try{
-            $this->authorize('listInventory', User::class);
-            $query = $request->searchquery ? : '';
-            if(empty($query)){
-                $data['stock'] = Stock::orderBy('id', 'desc')->paginate(30);
-            }else{
-                $data['stock'] = Stock::search(['product.identifier', 'product.name'], $query)->orderby('id', 'desc')->take(100)->get();
-            }
+    // public function getFilteredStock(Request $request)
+    // {
+    //     try{
+    //         $this->authorize('listInventory', User::class);
+    //         $query = $request->searchquery ? : '';
+    //         if(empty($query)){
+    //             $data['stock'] = Stock::orderBy('id', 'desc')->paginate(30);
+    //         }else{
+    //             // $data['stock'] = Stock::search(['product.identifier', 'product.name'], $query)->orderby('id', 'desc')->take(100)->get();
+    //             $data['stock'] = Stock::search(['product.identifier', 'product.name'], $query)->orderby('id', 'desc')->paginate(30);
+    //             $data['stock']->appends(['searchquery' => $request->searchquery]);
+    //         }
             
-            return view('modules.stock.partials.recordsTable', $data);
-            // return json_encode($sales);
-        }catch (\Exception $e){
-            return view('errors.exception')->with('error', $e->getMessage());
-        }
-    }
+    //         return view('modules.stock.partials.recordsTable', $data)->render();
+    //         // return json_encode($sales);
+    //     }catch (\Exception $e){
+    //         return view('errors.exception')->with('error', $e->getMessage());
+    //     }
+    // }
 
 
     public function showLog(){

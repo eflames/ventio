@@ -1,18 +1,20 @@
 $('body').on('keyup', '#searchField', function(){
     var searchquery = $(this).val();
+    var slug = $('#almacen').val();
     // console.log(searchquery);
     $.ajax({
-        method: 'POST',
+        method: 'GET',
         url: $(this).data('url'),
         dataType: 'html',
         data: {
             "_token": $("meta[name='csrf-token']").attr("content"),
-            searchquery : searchquery
+            searchquery : searchquery,
+            almacen : slug
         },
         success: function(res){
-            // console.log(res);
+            // console.log(slug);
             $('#recordsTable').html('');
-            $('#recordsTable').append(res);
+            $('#recordsTable').html(res);
             stop();
         },
         beforeSend: function(){

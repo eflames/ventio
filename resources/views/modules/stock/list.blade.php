@@ -27,8 +27,8 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item">Lista de stock disponible</li>
-                        @if($slug)
-                            <li class="breadcrumb-item">Almacen <strong>{{ strtoupper($slug) }}</strong></li>
+                        @if($almacen)
+                            <li class="breadcrumb-item">Almacen <strong>{{ strtoupper($almacen) }}</strong></li>
                         @endif
                     </ol>
                 </div>
@@ -36,7 +36,8 @@
         </div>
         <div class="col-md-4 col-lg-4 col-12 mb-2">
             <fieldset class="form-group position-relative has-icon-left">
-                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por identificador y nombre', 'id' => 'searchField', 'data-url' => route('api.getStock')]) }}
+                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por identificador y nombre', 'id' => 'searchField', 'data-url' => route('stock.list')]) }}
+                {{ Form::hidden('almacen', @$almacen, ['id' => 'almacen']) }}
                 <div class="form-control-position">
                     <i class="icon-magnifier grey"></i>
                 </div>
@@ -84,7 +85,7 @@
                              style="position: absolute; transform: translate3d(0px, 39px, 0px); top: 0px; left: 0px; will-change: transform;">
                              <a class="dropdown-item" href="{{ route('stock.list') }}">TODOS</a>
                             @foreach($wares as $warehouse)
-                                <a class="dropdown-item" href="{{ route('stock.filtered', ['slug' => $warehouse->slug]) }}">
+                                <a class="dropdown-item" href="{{ route('stock.list', ['almacen' => $warehouse->slug]) }}">
                                     {{ $warehouse->name }}
                                 </a>
                             @endforeach
@@ -101,43 +102,8 @@
                     <div class="card">
                         <div class="card-content collapse show">
                             <div id="loadSpinner" class="text-center"><span class="fa fa-spinner fa-spin fa-2x"></span></div>
-                            <div class="card-body card-dashboard">
-                                <table class="table table-striped table-borderless table-success">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-center">Identificador</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Disponible</th>
-                                        <th class="text-center">Almacén</th>
-                                        <th class="text-center">Precio venta</th>
-                                        <th class="text-center">Precio costo</th>
-                                        <th class="text-center" >Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="recordsTable">
-                                        @include('modules.stock.partials.recordsTable')
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th class="text-center">Identificador</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Disponible</th>
-                                        <th class="text-center">Almacén</th>
-                                        <th class="text-center">Precio venta</th>
-                                        <th class="text-center">Precio costo</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                                <div class="float-right">
-                                    {{ $stock->render() }}
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-12">
-                                        Leyenda: <span class="text-success">Stock correcto</span> | <span class="text-warning">Stock por debajo del mínimo</span> | <span class="text-danger">Stock agotado</span>
-                                    </div>
-                                    
-                                </div>
+                            <div class="card-body card-dashboard" id="recordsTable">
+                                @include('modules.stock.partials.recordsTable')
                             </div>
                         </div>
                     </div>
@@ -150,4 +116,29 @@
 @section('after-styles')
 @stop
 @section('after-scripts')
+<script type="text/javascript">
+
+    $(function() {
+        $('body').on('click', '.pagination a', function(e) {
+            e.preventDefault();
+
+            $('#load a').css('color', '#dfecf6');
+            $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
+
+            var url = $(this).attr('href');
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
+
+        function getArticles(url) {
+            $.ajax({
+                url : url
+            }).done(function (data) {
+                $('#recordsTable').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
+        }
+    });
+</script>
 @stop

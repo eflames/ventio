@@ -63,10 +63,10 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-8">
+                                        <div class="col-9">
                                             <p><span class="danger"><strong>Importante:</strong></span> El nombre de la tienda está definido por la licencia adquirida. No se puede editar manualmente.</p>
                                         </div>
-                                        <div class="col-4 text-right">
+                                        <div class="col-3 text-right">
                                             <button type="submit" class="btn btn-light btn-lg ld-ext-right">
                                                 Actualizar <div class="ld ld-ring ld-spin"></div>
                                             </button>

@@ -20,31 +20,37 @@ class ClientController extends Controller
 {
     use SEO;
 
-    public function index(){
+    public function index(Request $request){
         try{
             $this->authorize('listClients', User::class);
-            $data['clients'] = Client::orderBy('id', 'desc')->paginate(30);
+            $query = $request->searchquery ? : '';
+            $data['clients'] = Client::search(['name', 'telephone', 'email', 'id_number'], $query)->orderBy('id', 'desc')->paginate(30);
+            if($query){
+                $data['clients']->appends(['searchquery' => $request->searchquery]);
+            }
+            if ($request->ajax()) {
+                return view('modules.clients.partials.recordsTable', $data)->render();
+            }
             return view('modules.clients.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
-    use SEO;
 
-    public function getFilteredClients(Request $request){
-        try{
-            $this->authorize('listClients', User::class);
-            $query = $request->searchquery ? : '';
-            if(empty($query)){
-                $data['clients'] = Client::orderBy('id', 'desc')->paginate(30);
-            }else{
-                $data['clients'] = Client::search(['name', 'telephone', 'email'], $query)->orderby('id', 'desc')->take(100)->get();
-            }
-            return view('modules.clients.partials.recordsTable', $data);
-        }catch (\Exception $e){
-            return view('errors.exception')->with('error', $e->getMessage());
-        }
-    }
+    // public function getFilteredClients(Request $request){
+    //     try{
+    //         $this->authorize('listClients', User::class);
+    //         $query = $request->searchquery ? : '';
+    //         if(empty($query)){
+    //             $data['clients'] = Client::orderBy('id', 'desc')->paginate(30);
+    //         }else{
+    //             $data['clients'] = Client::search(['name', 'telephone', 'email', 'id_number'], $query)->orderby('id', 'desc')->take(100)->get();
+    //         }
+    //         return view('modules.clients.partials.recordsTable', $data);
+    //     }catch (\Exception $e){
+    //         return view('errors.exception')->with('error', $e->getMessage());
+    //     }
+    // }
 
 
     public function create(){

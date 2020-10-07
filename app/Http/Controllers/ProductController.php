@@ -23,31 +23,39 @@ class ProductController extends Controller
 {
     use SEO;
 
-    public function index(){
+    public function index(Request $request){
         try{
             $this->authorize('listInventory', User::class);
-           $data['products'] = Product::orderBy('id','desc')->with('category')->paginate(30);
             $this->setSeo('Productos');
+            $query = $request->searchquery ? : '';
+            $data['products'] = Product::search(['name', 'identifier'], $query)->with('category')->orderBy('id','desc')->with('category')->paginate(30);
+            if($query){
+                $data['products']->appends(['searchquery' => $request->searchquery]);
+            }
+            if ($request->ajax()) {
+                return view('modules.products.partials.recordsTable', $data)->render();
+            }
+            
             return view('modules.products.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
 
-    public function getFilteredProducts(Request $request){
-        try{
-            $this->authorize('listInventory', User::class);
-            $query = $request->searchquery ? : '';
-            if(empty($query)){
-                $data['products'] = Product::orderBy('id','desc')->with('category')->paginate(30);
-            }else{
-                $data['products'] = Product::search(['name', 'identifier'], $query)->with('category')->orderby('id', 'desc')->take(100)->get();
-            }
-            return view('modules.products.partials.recordsTable', $data);
-        }catch (\Exception $e){
-            return view('errors.exception')->with('error', $e->getMessage());
-        }
-    }
+    // public function getFilteredProducts(Request $request){
+    //     try{
+    //         $this->authorize('listInventory', User::class);
+    //         $query = $request->searchquery ? : '';
+    //         if(empty($query)){
+    //             $data['products'] = Product::orderBy('id','desc')->with('category')->paginate(30);
+    //         }else{
+    //             $data['products'] = Product::search(['name', 'identifier'], $query)->with('category')->orderby('id', 'desc')->take(100)->get();
+    //         }
+    //         return view('modules.products.partials.recordsTable', $data);
+    //     }catch (\Exception $e){
+    //         return view('errors.exception')->with('error', $e->getMessage());
+    //     }
+    // }
 
 
     public function create($fs = null){

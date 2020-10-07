@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-4 col-12 mb-2">
             <fieldset class="form-group position-relative has-icon-left">
-                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por identificador o nombre', 'id' => 'searchField', 'data-url' => route('api.getProducts')]) }}
+                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por identificador o nombre', 'id' => 'searchField', 'data-url' => route('products.list')]) }}
                 <div class="form-control-position">
                     <i class="icon-magnifier grey"></i>
                 </div>
@@ -60,31 +60,8 @@
                     <div class="card border-top-3 border-top-green">
                         <div class="card-content collapse show">
                             <div id="loadSpinner" class="text-center"><span class="fa fa-spinner fa-spin fa-2x"></span></div>
-                            <div class="card-body card-dashboard">
-                                <table class="table table-striped table-bordered table-borderless">
-                                    <thead>
-                                    <tr>
-                                        <th>Identificador</th>
-                                        <th>Nombre</th>
-                                        <th>Categoría</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="recordsTable">
-                                        @include('modules.products.partials.recordsTable')
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Identificador</th>
-                                        <th>Nombre</th>
-                                        <th>Categoría</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                                <div class="float-right">
-                                    {{ $products->render() }}
-                                </div>
+                            <div class="card-body card-dashboard" id="recordsTable">
+                                @include('modules.products.partials.recordsTable')
                             </div>
                         </div>
                     </div>
@@ -98,5 +75,29 @@
 
 @stop
 @section('after-scripts')
+<script type="text/javascript">
 
+    $(function() {
+        $('body').on('click', '.pagination a', function(e) {
+            e.preventDefault();
+
+            $('#load a').css('color', '#dfecf6');
+            $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
+
+            var url = $(this).attr('href');
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
+
+        function getArticles(url) {
+            $.ajax({
+                url : url
+            }).done(function (data) {
+                $('#recordsTable').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
+        }
+    });
+</script>
 @stop

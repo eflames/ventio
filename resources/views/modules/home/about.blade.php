@@ -36,7 +36,17 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <h4 class="pink">v1.7.0 <small class="grey">19/07/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <h4 class="pink">v1.7.1 <small class="grey">06/010/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <ul>
+                                                    <li>Searchbar improves with live pagination after search</li>
+                                                    <li>UI improves and fixes</li>
+                                                    <li>Laravel core update from 6.18.14 to 6.18.42</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="pink">v1.7.0 <small class="grey">19/07/2020</small></h4>
                                                 <ul>
                                                     <li>First official release. RC removed.</li>
                                                     <li>Ventio now has licensing method.</li>
@@ -348,7 +358,7 @@
                                             <div class="col-12">
                                                 <h4>Horas invertidas hasta <strong>{{ config('ventio.VERSION') }}</strong></h4>
                                                 <ul>
-                                                    <li><strong>299</strong> horas de desarollo</li>
+                                                    <li><strong>304</strong> horas de desarollo</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -356,7 +366,7 @@
                                             <div class="col-12">
                                                 <h4>Tecnología y librerías:</h4>
                                                 <ul>
-                                                    <li>Laravel Framework v6.18 LTS</li>
+                                                    <li>Laravel Framework v6.18.42 LTS</li>
                                                     <li>Twitter Bootstrap v4.1.3</li>
                                                     <li>Yajra Datatables v1</li>
                                                     <li>Barryvdh DomPdf</li>

@@ -26,7 +26,7 @@
         </div>
         <div class="col-md-4 col-12 mb-2">
             <fieldset class="form-group position-relative has-icon-left">
-                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por nombre, cédula o teléfono', 'id' => 'searchField', 'data-url' => route('api.getClients')]) }}
+                {{ Form::text('searchField', null, ['class' => 'form-control input-lg', 'id' => 'searchBar', 'placeholder' => 'Filtrar por nombre, cédula o teléfono', 'id' => 'searchField', 'data-url' => route('clients.list')]) }}
                 <div class="form-control-position">
                     <i class="icon-magnifier grey"></i>
                 </div>
@@ -51,33 +51,8 @@
                     <div class="card border-top-3 border-top-cyan">
                         <div class="card-content collapse show">
                             <div id="loadSpinner" class="text-center"><span class="fa fa-spinner fa-spin fa-2x"></span></div>
-                            <div class="card-body card-dashboard">
-                                <table class="table table-bordered table-borderless">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Cédula</th>
-                                        <th class="text-center">Teléfono</th>
-                                        <th class="text-center">E-Mail</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="recordsTable">
-                                        @include('modules.clients.partials.recordsTable')
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Cédula</th>
-                                        <th class="text-center">Teléfono</th>
-                                        <th class="text-center">E-Mail</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                                <div class="float-right">
-                                    {{ $clients->render() }}
-                                </div>
+                            <div class="card-body card-dashboard" id="recordsTable">
+                                @include('modules.clients.partials.recordsTable')
                             </div>
                         </div>
                     </div>
@@ -91,5 +66,29 @@
 
 @stop
 @section('after-scripts')
+<script type="text/javascript">
 
+    $(function() {
+        $('body').on('click', '.pagination a', function(e) {
+            e.preventDefault();
+
+            $('#load a').css('color', '#dfecf6');
+            $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
+
+            var url = $(this).attr('href');
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
+
+        function getArticles(url) {
+            $.ajax({
+                url : url
+            }).done(function (data) {
+                $('#recordsTable').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
+        }
+    });
+</script>
 @stop

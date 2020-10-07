@@ -471,33 +471,42 @@ class SaleController extends Controller
         }
     }
 
-    public function sales()
+    public function sales(Request $request)
     {
         try{
             $this->authorize('sales', User::class);
             $this->setSeo('Ventas registradas');
-            $data['sales'] = Sale::orderBy('id', 'desc')->with('client')->with('details')->with('status')->paginate(30);
+            $query = $request->searchquery ? : '';
+            $data['sales'] = Sale::search(['id', 'client.name', 'amount', 'closed_at'], $query)->orderBy('id', 'desc')
+            ->with('client')->with('details')->with('status')->paginate(30);
+            if($query){
+                $data['sales']->appends(['searchquery' => $request->searchquery]);
+            }
+            if ($request->ajax()) {
+                return view('modules.sales.partials.recordsTable', $data)->render();
+            }
             return view('modules.sales.list', $data);
         }catch (\Exception $e){
             return view('errors.exception')->with('error', $e->getMessage());
         }
     }
-    public function getFilteredSales(Request $request)
-    {
-        try{
-            $this->authorize('sales', User::class);
-            $query = $request->searchquery ? : '';
-            if(empty($query)){
-                $data['sales'] = Sale::orderBy('id', 'desc')->paginate(30);
-            }else{
-                $data['sales'] = Sale::search(['id', 'client.name', 'amount', 'closed_at'], $query)->orderby('id', 'desc')->take(100)->get();
-            }
-            return view('modules.sales.partials.recordsTable', $data);
-            // return json_encode($sales);
-        }catch (\Exception $e){
-            return view('errors.exception')->with('error', $e->getMessage());
-        }
-    }
+
+    // public function getFilteredSales(Request $request)
+    // {
+    //     try{
+    //         $this->authorize('sales', User::class);
+    //         $query = $request->searchquery ? : '';
+    //         if(empty($query)){
+    //             $data['sales'] = Sale::orderBy('id', 'desc')->paginate(30);
+    //         }else{
+    //             $data['sales'] = Sale::search(['id', 'client.name', 'amount', 'closed_at'], $query)->orderby('id', 'desc')->take(100)->get();
+    //         }
+    //         return view('modules.sales.partials.recordsTable', $data);
+    //         // return json_encode($sales);
+    //     }catch (\Exception $e){
+    //         return view('errors.exception')->with('error', $e->getMessage());
+    //     }
+    // }
 
 
     public function viewSale($idc)
