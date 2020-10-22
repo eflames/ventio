@@ -182,12 +182,12 @@ class ProductController extends Controller
     }
     public function APIgetallForSale(Request $request){
         $this->authorize('listInventory', User::class);
-        $default_warehouse = Warehouse::where('is_default', 1)->first();
+        $default_warehouse = Warehouse::where('is_default', 1)->pluck('id');
         $query = $request->q ? : '';
-        $data = Product::search(['name', 'identifier'], $query)->whereHas('stock')->get();
+        $data = Product::search(['name', 'identifier'], $query)->whereHas('stock')->with('stock')->get();
         $results = [];
         foreach ($data as $result){
-            $stocks = Stock::where('product_id', $result->id)->where('qty', '>', 0)->where('warehouse_id', $default_warehouse->id)->get();
+            $stocks = Stock::where('product_id', $result->id)->where('qty', '>', 0)->whereIn('warehouse_id', $default_warehouse)->get();
             foreach ($stocks as $stock){
                 $results[] = [
                     'id' => $stock->id,

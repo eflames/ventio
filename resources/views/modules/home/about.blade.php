@@ -36,9 +36,10 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <h4 class="pink">v1.7.1 <small class="grey">06/010/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <h4 class="pink">v1.7.1 <small class="grey">06/10/2020 <strong>(ACTUAL)</strong></small></h4>
                                                 <ul>
                                                     <li>Searchbar improves with live pagination after search</li>
+                                                    <li>Now you can add more than 1 default Warehouse</li>
                                                     <li>UI improves and fixes</li>
                                                     <li>Laravel core update from 6.18.14 to 6.18.42</li>
                                                 </ul>

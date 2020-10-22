@@ -31,7 +31,7 @@ class WarehouseController extends Controller
             $ware->created_by = auth()->user()->id;
             $ware->slug = Str::slug($request->name);
             if($request->is_default == 1){
-                 Warehouse::where('is_default', 1)->update(['is_default' => null]);
+                //  Warehouse::where('is_default', 1)->update(['is_default' => null]);
                  $ware->is_default = 1;
             }
             $ware->save();
@@ -80,9 +80,10 @@ class WarehouseController extends Controller
             $this->authorize('config', User::class);
             $data = Warehouse::findOrFail($id);
             $optVal = $option == 0 ? null : 1;
-            if($optVal == 1){
-                Warehouse::where('is_default', 1)->update(['is_default' => null]);
-            }
+            // if($optVal == 1){
+            //     Warehouse::where('is_default', 1)->update(['is_default' => null]);
+            // }
+            // $data->is_default = $optVal;
             $data->is_default = $optVal;
             $data->save();
             $request->session()->flash('message', "Almacén ".$data->name." actualizado exitosamente");
