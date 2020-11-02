@@ -33,8 +33,7 @@ class SaleController extends Controller
             $this->authorize('sell', $user);
             $checkOpenSale = Sale::where('client_id', $request->client_id)->where('sale_status_id', 1)->first();
             if($checkOpenSale){
-                return back()->with('error', 'Este cliente ya posee una venta abierta (#'. $checkOpenSale->id .'),
-                continúe la venta mencionada o elimine para crear una nueva.');
+                return back()->with('error', "Este cliente ya posee una venta abierta. Venta #" . $checkOpenSale->id);
             }
             $sale = new Sale();
             $sale->client_id = $request->client_id;

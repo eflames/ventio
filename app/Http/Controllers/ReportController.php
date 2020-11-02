@@ -107,7 +107,8 @@ class ReportController extends Controller
             $data['sales'] = Sale::where('sale_status_id', 2)->whereHas('client', function ($q) use ($request) {
                 $q->where('id', $request->client_id);
             })->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
-            $data['client'] = Client::findOrFail($request->client_id)->pluck('name')->first();
+            $client = Client::findOrFail($request->client_id);
+            $data['client'] = $client->name;
             return view('modules.reports.byClientEmbed',$data);
 
         }catch (\Exception $e){
@@ -126,7 +127,8 @@ class ReportController extends Controller
             $data['sales'] = Sale::where('sale_status_id', 2)->whereHas('client', function ($q) use ($request) {
                 $q->where('id', $request->client_id);
             })->whereBetween('closed_at',[$date_from, $date_to])->orderBy('id', 'DESC')->get();
-            $data['client'] = Client::findOrFail($request->client_id)->pluck('name')->first();
+            $client = Client::findOrFail($request->client_id);
+            $data['client'] = $client->name;
             $pdf = PDF::loadView('modules.reports.templates.byClient', $data);
             return $pdf->download('Reporte - Ventas por cliente - '.date('dmY').'.pdf');
 
