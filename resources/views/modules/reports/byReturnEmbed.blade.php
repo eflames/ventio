@@ -63,12 +63,12 @@
                                         <tr class="datos">
                                             <td>{{ $detail->updated_at->format('d-m-Y') }}</td>
                                             <td>
-                                                <a href="{{ route('sale.view', ['id' => base64_encode( $detail->sale->id )]) }}">
+                                                <a href="{{ route('sale.view', base64_encode( $detail->sale->id )) }}">
                                                     <strong>#{{ $detail->sale->id }}</strong>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="{{ route('client.details', ['id' => $detail->sale->client->id_number]) }}">
+                                                <a href="{{ route('client.details', $detail->sale->client->id_number) }}">
                                                     <strong>{{ $detail->sale->client->name }}</strong>
                                                 </a>
                                             </td>
