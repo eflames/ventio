@@ -22,7 +22,16 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
+        <fieldset class="form-group form-group-style">
+            <label for="name" class="filled">Fecha: <span class="text-danger">*</span></label>
+            {{ Form::date('date', null, ['class' => 'form-control', 'required' => true, 'id' => 'date']) }}
+            @if ($errors->has('date'))
+                <p class="badge-default badge-danger block-tag text-center"><small class="block-area white">{{ $errors->first('date') }}</small></p>
+            @endif
+        </fieldset>
+    </div>
+    <div class="col-6">
         <fieldset class="form-group form-group-style">
             <label for="name" class="filled">Monto: <span class="text-danger">*</span></label>
             {{ Form::number('amount', null, ['class' => 'form-control', 'required' => true, 'id' => 'amount', 'step' => 'any']) }}

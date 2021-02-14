@@ -30,6 +30,14 @@
                         </fieldset>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <fieldset class="form-group form-group-style">
+                            <label for="name" class="filled">Método de pago:</label>
+                            {{ Form::select('payment_method_id', ['' => 'Todos'] + $payment_methods->toArray(), null, ['class' => 'form-control'] ) }}
+                        </fieldset>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <input type="reset" class="btn btn-light btn-lg" data-dismiss="modal" value="Cancelar">

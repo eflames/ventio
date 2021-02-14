@@ -58,7 +58,8 @@
                                     <tbody>
                                         @forelse($expenses as $expense)
                                             <tr>
-                                                <td class="align-middle">{{ $expense->created_at->format('d/m/Y') }}</td>
+
+                                                <td class="align-middle">{{ $expense->date ? date("d/m/Y", strtotime($expense->date)) : 'S/F'}}</td>
                                                 <td class="align-middle">{{ $expense->description }}</td>
                                                 <td class="align-middle">{{ $expense->createdBy->name }}</td>
                                                 <td class="align-middle text-right bg-success bg-lighten-5"><strong>${{ number_format($expense->amount, 2) }}</strong></td>
@@ -68,6 +69,7 @@
                                                             <button type="button" data-description="{{ $expense->description }}"
                                                                     data-amount="{{ $expense->amount }}"
                                                                     data-expense_id="{{ $expense->id }}"
+                                                                    data-date="{{ $expense->date }}"
                                                                     class="btn btn-blue btn-sm"
                                                                     data-toggle="modal" data-target="#editExpenseModal"
                                                                     data-tooltip="tooltip" data-placement="left" title="Editar">
@@ -121,6 +123,7 @@
             modal.find('.modal-title-changed').html('Editar <strong>' + button.data('description') + '</strong>');
             modal.find('#description').val(button.data('description'));
             modal.find('#amount').val(button.data('amount'));
+            modal.find('#date').val(button.data('date'));
             modal.find('#expense_id').val(button.data('expense_id'));
         });
     </script>

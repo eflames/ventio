@@ -9,7 +9,9 @@ class Expense extends Model
 {
     protected $table = 'expenses';
 
-    protected $fillable = ['description', 'amount'];
+    protected $fillable = ['description', 'amount', 'date'];
+
+    // protected $dates = ['date'];
 
     public function createdBy()
     {

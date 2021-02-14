@@ -8,6 +8,7 @@ use App\Models\Expense;
 use App\Models\Loan;
 use App\Models\LoanPayment;
 use App\Models\Payment;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Sale;
@@ -34,6 +35,7 @@ class ReportController extends Controller
             $data['sellers'] = User::pluck('name', 'id');
             $data['categories'] = ProductCategory::pluck('name', 'id');
             $data['warehouses'] = Warehouse::pluck('name', 'id');
+            $data['payment_methods'] = PaymentMethod::pluck('name', 'id');
             $data['users'] = User::pluck('name', 'id');
             return view('modules.reports.list', $data);
         }catch (\Exception $e){
@@ -332,6 +334,11 @@ class ReportController extends Controller
             $data['date_from'] = $date_from;
             $data['date_to'] = $date_to;
 
+            if(!empty($request->payment_method_id)){
+                $data['payments'] = Payment::where('payment_method_id', $request->payment_method_id)->whereBetween('created_at',[$date_from, $date_to])->get();
+                $data['method'] = PaymentMethod::findOrFail($request->payment_method_id);
+                return view('modules.reports.byTypeSelectedEmbed',$data);
+            }
             $data['payments'] = DB::table('payments')
                 ->join('payment_methods', 'payments.payment_method_id', '=', 'payment_methods.id')
                 ->join('sales', 'payments.sale_id', '=', 'sales.id')
@@ -368,6 +375,12 @@ class ReportController extends Controller
             $date_to = $request->date_to;
             $data['date_from'] = $date_from;
             $data['date_to'] = $date_to;
+            if(!empty($request->method)){
+                $data['payments'] = Payment::where('payment_method_id', $request->method_id)->whereBetween('created_at',[$date_from, $date_to])->get();
+                $data['method'] = $request->method;
+                $pdf = PDF::loadView('modules.reports.templates.byTypeSelected', $data);
+                return $pdf->download('Reporte - Flujo de caja - '.date('dmY').'.pdf');
+            }
 
             $data['payments'] = DB::table('payments')
                 ->join('payment_methods', 'payments.payment_method_id', '=', 'payment_methods.id')
@@ -403,7 +416,7 @@ class ReportController extends Controller
             $date_to = $request->date_to ? Carbon::createFromFormat('Y-m-d H:i:s', $request->date_to. ' 23:59:59') : Carbon::now();
             $data['date_from'] = $date_from;
             $data['date_to'] = $date_to;
-            $data['expenses'] = Expense::whereBetween('updated_at',[$date_from, $date_to])
+            $data['expenses'] = Expense::whereBetween('date',[$date_from, $date_to])
                 ->orderBy('id', 'DESC')
                 ->get();
 
@@ -421,7 +434,7 @@ class ReportController extends Controller
             $date_to = $request->date_to;
             $data['date_from'] = $date_from;
             $data['date_to'] = $date_to;
-            $data['expenses'] = Expense::whereBetween('updated_at',[$date_from, $date_to])
+            $data['expenses'] = Expense::whereBetween('date',[$date_from, $date_to])
                 ->orderBy('id', 'DESC')
                 ->get();
             $pdf = PDF::loadView('modules.reports.templates.byExpense', $data);

@@ -36,7 +36,16 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <h4 class="pink">v1.7.2 <small class="grey">02/12/2020 <strong>(ACTUAL)</strong></small></h4>
+                                                <h4 class="pink">v1.7.3 <small class="grey">05/02/2021 <strong>(ACTUAL)</strong></small></h4>
+                                                <ul>
+                                                    <li>Added date field in expenses module</li>
+                                                    <li>Added select field to ByType report for payment methods details</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="pink">v1.7.2 <small class="grey">02/12/2020</small></h4>
                                                 <ul>
                                                     <li>Fixed styles broken with Chrome 87 update</li>
                                                 </ul>
@@ -353,7 +362,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                            
+
                                     </div>
                                     <div class="col-3">
                                         <div class="row">
