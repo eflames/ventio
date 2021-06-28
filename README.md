@@ -29,20 +29,23 @@ More info in my website: https://www.ernestoflames.com
 
 ## Some screenshots
 
-<p align="center"><img src="https://i.postimg.cc/bw6gyf0C/Annotation-2020-05-04-011037.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/3wMLw9VM/Web-capture-27-6-2021-20221-ventio-test.jpg" width="500"></p>
 <p align="center">Login screen</p>
 <hr>
-<p align="center"><img src="https://i.postimg.cc/c6q033BC/Annotation-2020-05-04-004307.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/3xj8Lfg9/Web-capture-27-6-2021-202244-ventio-test.jpg" width="500"></p>
 <p align="center">Main screen</p>
 <hr>
-<p align="center"><img src="https://i.postimg.cc/yY9SbX5f/Annotation-2020-05-04-004625.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/d0qqgR6F/Web-capture-27-6-2021-202421-ventio-test.jpg" width="500"></p>
 <p align="center">Sales</p>
 <hr>
-<p align="center"><img src="https://i.postimg.cc/Y2TWRyXG/Annotation-2020-05-04-004439.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/5yF18s4B/Web-capture-27-6-2021-202920-ventio-test.jpg" width="500"></p>
 <p align="center">Stock</p>
 <hr>
-<p align="center"><img src="https://i.postimg.cc/nVXmvt1f/Annotation-2020-05-04-004710.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/GpqcRBgy/Web-capture-27-6-2021-202555-ventio-test.jpg" width="500"></p>
 <p align="center">Loans</p>
 <hr>
-<p align="center"><img src="https://i.postimg.cc/x13N0j9M/Annotation-2020-05-04-004356.png" width="500"></p>
+<p align="center"><img src="https://i.postimg.cc/QtCjdXvn/Web-capture-27-6-2021-202627-ventio-test.jpg" width="500"></p>
 <p align="center">Reports</p>
+<hr>
+<p align="center"><img src="https://i.postimg.cc/JnFMyfL7/Web-capture-27-6-2021-202724-ventio-test.jpg" width="500"></p>
+<p align="center">Main configs</p>
