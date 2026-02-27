@@ -8,6 +8,8 @@
 
 ## About Ventio
 
+# ⚠️ Ventio is no longer being maintained and its code has been released
+
 Ventio is an inventory and sales manager created by me, developed with high security standards, a highly polished, fast and intuitive user interface.
 
 Ventio features:
