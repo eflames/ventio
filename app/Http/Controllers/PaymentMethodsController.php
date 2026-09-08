@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PaymentMethodsRequest;
 use App\Models\PaymentMethod;
 use App\Traits\SEO;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentMethodsController extends Controller

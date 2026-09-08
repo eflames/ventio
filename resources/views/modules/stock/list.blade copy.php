@@ -38,7 +38,7 @@
             <div class="media width-450 float-right">
                 <div class="media-body media-right text-right">
                     <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                        @can('manageInventory', \App\User::class)
+                        @can('manageInventory', \App\Models\User::class)
                             <a href="#" data-tooltip="tooltip" data-placement="left" title="Cargar en lote"
                                class="btn btn-light-green btn-lg"  data-toggle="modal" data-target="#importModal">
                                 <span class="fa fa-upload"></span>
@@ -53,7 +53,7 @@
                                 <span class="fa fa-list-alt"></span>
                             </a>
                         @endcan
-                        {{-- @can('listInventory', \App\User::class)
+                        {{-- @can('listInventory', \App\Models\User::class)
                             <a href="{{ route('stock.report') }}" class="btn btn-green btn-lg btn-darken-3" data-tooltip="tooltip" data-placement="top" title="Descargar lista">
                                 <span class="fa fa-download"></span>
                             </a>

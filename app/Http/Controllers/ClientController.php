@@ -8,7 +8,7 @@ use App\Models\Client;
 use App\Models\Deposit;
 use App\Models\Loan;
 use App\Models\Sale;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;

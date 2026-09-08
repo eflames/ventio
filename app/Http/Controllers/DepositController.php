@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddCreditRequest;
 use App\Models\Deposit;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;

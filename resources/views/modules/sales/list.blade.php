@@ -28,7 +28,7 @@
                 </div>
             </fieldset>
         </div>
-        @can('sell', \App\User::class)
+        @can('sell', \App\Models\User::class)
             <div class="content-header-right col-md-4 col-12">
                 <div class="media width-250 float-right">
                     <div class="media-body media-right text-right">

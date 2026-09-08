@@ -1,0 +1,104 @@
+name: ventio
+
+services:
+    # ---------------------------------------------------------------- Aplicación
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        image: ventio:latest
+        restart: unless-stopped
+        environment:
+            APP_NAME: "${APP_NAME:-Ventio}"
+            APP_ENV: "${APP_ENV:-production}"
+            # ¡Cambia esta clave antes de usar en producción!
+            APP_KEY: "${APP_KEY:-base64:PaBMG4mmkaOHAOLpHbAUJ0ppC+LKRgbRmdjvAZijscE=}"
+            APP_DEBUG: "${APP_DEBUG:-false}"
+            APP_URL: "${APP_URL:-http://localhost:8080}"
+
+            APP_LOCALE: "${APP_LOCALE:-es}"
+            APP_FALLBACK_LOCALE: "${APP_FALLBACK_LOCALE:-en}"
+
+            LOG_CHANNEL: "${LOG_CHANNEL:-stack}"
+            LOG_LEVEL: "${LOG_LEVEL:-info}"
+
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: "3306"
+            DB_DATABASE: "${DB_DATABASE:-ventio}"
+            DB_USERNAME: "${DB_USERNAME:-ventio}"
+            DB_PASSWORD: "${DB_PASSWORD:-secret}"
+            DB_DUMP_BINARY_PATH: ""
+
+            SESSION_DRIVER: "${SESSION_DRIVER:-file}"
+            SESSION_LIFETIME: "${SESSION_LIFETIME:-120}"
+
+            CACHE_STORE: "${CACHE_STORE:-file}"
+            QUEUE_CONNECTION: "${QUEUE_CONNECTION:-sync}"
+
+            MAIL_MAILER: "${MAIL_MAILER:-log}"
+            MAIL_HOST: "${MAIL_HOST:-}"
+            MAIL_PORT: "${MAIL_PORT:-2525}"
+            MAIL_USERNAME: "${MAIL_USERNAME:-}"
+            MAIL_PASSWORD: "${MAIL_PASSWORD:-}"
+            MAIL_ENCRYPTION: "${MAIL_ENCRYPTION:-null}"
+            MAIL_FROM_ADDRESS: "${MAIL_FROM_ADDRESS:-ventio@example.com}"
+            MAIL_FROM_NAME: "${MAIL_FROM_NAME:-Ventio}"
+
+            VENTIO_VERSION: "${VENTIO_VERSION:-v2.0.0}"
+
+            # Ponlo en "false" si prefieres ejecutar las migraciones a mano
+            RUN_MIGRATIONS: "${RUN_MIGRATIONS:-true}"
+        volumes:
+            - app-storage:/var/www/html/storage
+            - app-bootstrap:/var/www/html/bootstrap/cache
+            - app-backups:/var/www/html/public/backups
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - ventio
+
+    # ------------------------------------------------------------------- Nginx
+    web:
+        build:
+            context: .
+            dockerfile: docker/web/Dockerfile
+        image: ventio-web:latest
+        restart: unless-stopped
+        ports:
+            - "${APP_PORT:-8080}:80"
+        depends_on:
+            - app
+        networks:
+            - ventio
+
+    # ----------------------------------------------------------------- MariaDB
+    db:
+        image: mariadb:11.4
+        restart: unless-stopped
+        environment:
+            MARIADB_DATABASE: "${DB_DATABASE:-ventio}"
+            MARIADB_USER: "${DB_USERNAME:-ventio}"
+            MARIADB_PASSWORD: "${DB_PASSWORD:-secret}"
+            MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root_secret}"
+        volumes:
+            - db-data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD-SHELL", "mariadb-admin ping -h localhost -uroot -p$${MARIADB_ROOT_PASSWORD} --silent"]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 30s
+        networks:
+            - ventio
+
+networks:
+    ventio:
+        driver: bridge
+
+volumes:
+    app-storage:
+    app-bootstrap:
+    app-backups:
+    db-data:

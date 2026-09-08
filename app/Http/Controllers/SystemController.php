@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\LicenseUtils;
 use App\Models\Product;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Artisan;

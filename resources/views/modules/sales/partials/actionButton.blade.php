@@ -7,7 +7,7 @@
  */?>
 {{ Form::open(['url' => 'venta/delete/'.$sale->id, 'method' => 'post', 'id'=>'formelim-'.$sale->id, 'class' => 'pt-1']) }}
 <div class="btn-group btn-group-sm">
-    @can('sell', \App\User::class)
+    @can('sell', \App\Models\User::class)
             @if( $sale->status->name == 'Incompleto')
                 <a href="{{ route('sale.edit', ['id' => base64_encode($sale->id)]) }}"  class="btn btn-sm btn-grey-blue btn-outline-accent-4"
                     data-tooltip="tooltip" data-placement="left" title="Editar">

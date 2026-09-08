@@ -35,7 +35,7 @@
                 </div>
             </fieldset>
         </div>
-        @can('manageInventory', \App\User::class)
+        @can('manageInventory', \App\Models\User::class)
             <div class="content-header-right col-md-4 col-12">
                 <div class="media width-400 float-right">
                     <div class="media-body media-right text-right">

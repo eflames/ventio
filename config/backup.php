@@ -1,5 +1,13 @@
 <?php
 
+use Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification;
+use Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification;
+use Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification;
+use Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification;
+use Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification;
+use Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification;
+use Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy;
+
 return [
 
     'backup' => [
@@ -34,27 +42,22 @@ return [
                 /*
                  * Determines if symlinks should be followed.
                  */
-                'followLinks' => false,
+                'follow_links' => false,
+
+                /*
+                 * Determines if it should avoid unreadable folders.
+                 */
+                'ignore_unreadable_directories' => false,
+
+                /*
+                 * This path is used to make directories in resulting zip-file relative.
+                 * Set to `null` to include complete absolute path.
+                 */
+                'relative_path' => null,
             ],
 
             /*
-             * The names of the connections to the databases that should be backed up
-             * MySQL, PostgreSQL, SQLite and Mongo databases are supported.
-             *
-             * The content of the database dump may be customized for each connection
-             * by adding a 'dump' key to the connection settings in config/database.php.
-             * E.g.
-             * 'mysql' => [
-             *       ...
-             *      'dump' => [
-             *           'excludeTables' => [
-             *                'table_to_exclude_from_backup',
-             *                'another_table_to_exclude'
-             *            ]
-             *       ]
-             * ],
-             *
-             * For a complete list of available customization options, see https://github.com/spatie/db-dumper
+             * The names of the connections to the databases that should be backed up.
              */
             'databases' => [
                 'mysql',
@@ -63,18 +66,21 @@ return [
 
         /*
          * The database dump can be compressed to decrease diskspace usage.
-         *
-         * Out of the box Laravel-backup supplies
-         * Spatie\DbDumper\Compressors\GzipCompressor::class.
-         *
-         * You can also create custom compressor. More info on that here:
-         * https://github.com/spatie/db-dumper#using-compression
-         *
          * If you do not want any compressor at all, set it to null.
          */
         'database_dump_compressor' => null,
 
+        'database_dump_file_timestamp_format' => null,
+
+        'database_dump_filename_base' => 'database',
+
+        'database_dump_file_extension' => '',
+
         'destination' => [
+
+            'compression_method' => ZipArchive::CM_DEFAULT,
+
+            'compression_level' => 9,
 
             /*
              * The filename prefix used for the backup zip file.
@@ -87,56 +93,53 @@ return [
             'disks' => [
                 'backup',
             ],
+
+            'continue_on_failure' => false,
         ],
 
         /*
          * The directory where the temporary files will be stored.
          */
         'temporary_directory' => storage_path('app/backup-temp'),
+
+        'password' => env('BACKUP_ARCHIVE_PASSWORD'),
+
+        'encryption' => 'default',
+
+        'verify_backup' => false,
+
+        'tries' => 1,
+
+        'retry_delay' => 0,
     ],
 
     /*
      * You can get notified when specific events occur. Out of the box you can use 'mail' and 'slack'.
-     * For Slack you need to install guzzlehttp/guzzle.
      *
      * You can also use your own notification classes, just make sure the class is named after one of
-     * the `Spatie\Backup\Events` classes.
+     * the `Spatie\Backup\Notifications\Notifications` classes.
      */
-   'notifications' => [
+    'notifications' => [
 
-       'notifications' => [
-           \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => null,
-           \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => null,
-           \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => null,
-           \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => null,
-           \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => null,
-           \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => null,
-       ],
+        'notifications' => [
+            BackupHasFailedNotification::class => [],
+            UnhealthyBackupWasFoundNotification::class => [],
+            CleanupHasFailedNotification::class => [],
+            BackupWasSuccessfulNotification::class => [],
+            HealthyBackupWasFoundNotification::class => [],
+            CleanupWasSuccessfulNotification::class => [],
+        ],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default
          * notifiable will use the variables specified in this config file.
          */
-//        'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
+        'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
-//        'mail' => [
-//            'to' => 'your@example.com',
-//        ],
-//
-//        'slack' => [
-//            'webhook_url' => '',
-
-            /*
-             * If this is set to null the default channel of the webhook will be used.
-             */
-//            'channel' => null,
-//
-//            'username' => null,
-//
-//            'icon' => null,
-//
-//        ],
-   ],
+        // 'mail' => [
+        //     'to' => 'your@example.com',
+        // ],
+    ],
 
     /*
      * Here you can specify which backups should be monitored.
@@ -150,15 +153,6 @@ return [
             'newestBackupsShouldNotBeOlderThanDays' => 1,
             'storageUsedMayNotBeHigherThanMegabytes' => 5000,
         ],
-
-        /*
-        [
-            'name' => 'name of the second app',
-            'disks' => ['local', 's3'],
-            'newestBackupsShouldNotBeOlderThanDays' => 1,
-            'storageUsedMayNotBeHigherThanMegabytes' => 5000,
-        ],
-        */
     ],
 
     'cleanup' => [
@@ -171,7 +165,7 @@ return [
          * No matter how you configure it the default strategy will never
          * delete the newest backup.
          */
-        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
+        'strategy' => DefaultStrategy::class,
 
         'defaultStrategy' => [
 

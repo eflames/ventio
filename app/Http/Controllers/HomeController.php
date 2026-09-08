@@ -10,7 +10,7 @@ use App\Models\Loan;
 use App\Models\LoanPayment;
 use App\Models\Sale;
 use App\Traits\SEO;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

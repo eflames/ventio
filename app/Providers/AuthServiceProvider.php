@@ -2,34 +2,26 @@
 
 namespace App\Providers;
 
-use App\Policies\ManageUserPolicy;
+use App\Models\User;
 use App\Policies\PermissionPolicy;
-use App\Policies\SalePolicy;
-
-use App\User;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array
+     * Register any application services.
      */
-    protected $policies = [
-        User::class => PermissionPolicy::class,
-    ];
+    public function register(): void
+    {
+        //
+    }
 
     /**
-     * Register any authentication / authorization services.
-     *
-     * @return void
+     * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->registerPolicies();
-
-        //
+        Gate::policy(User::class, PermissionPolicy::class);
     }
 }

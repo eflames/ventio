@@ -12,7 +12,7 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\Stock;
 use App\Models\Warehouse;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use Illuminate\Support\Facades\Auth;

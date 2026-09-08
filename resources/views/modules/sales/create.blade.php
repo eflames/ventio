@@ -119,7 +119,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- @can ('config', \App\User::class)
+                        {{-- @can ('config', \App\Models\User::class)
                         <div class="card">
                             <div class="card-header pb-0">
                                 <h4 class="card-title text-center">Almacen: <strong>{{ $default_warehouse->name }}</strong></h4>

@@ -3,22 +3,23 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated as RedirectIfAuthenticatedMiddleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class RedirectIfAuthenticated
+class RedirectIfAuthenticated extends RedirectIfAuthenticatedMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
-     * @return mixed
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+        foreach ($guards !== [] ? $guards : [null] as $guard) {
+            if (auth()->guard($guard)->check()) {
+                return redirect('/');
+            }
         }
 
         return $next($request);

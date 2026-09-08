@@ -12,7 +12,7 @@ use App\Models\Rol;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\Stock;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\SEO;

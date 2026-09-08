@@ -5,7 +5,7 @@ use App\Http\Requests\UserEditRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Traits\SEO;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

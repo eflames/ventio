@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        @can('manageCredits', \App\User::class)
+        @can('manageCredits', \App\Models\User::class)
             <div class="content-header-right col-md-6 col-12">
                 <div class="media width-250 float-right">
                     <div class="media-body media-right text-right">
@@ -50,7 +50,7 @@
                                         <th>Descripción</th>
                                         <th>Cargado por:</th>
                                         <th class="text-right">Monto</th>
-                                        @can('manageCredits', \App\User::class)
+                                        @can('manageCredits', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>
@@ -63,7 +63,7 @@
                                                 <td class="align-middle">{{ $expense->description }}</td>
                                                 <td class="align-middle">{{ $expense->createdBy->name }}</td>
                                                 <td class="align-middle text-right bg-success bg-lighten-5"><strong>${{ number_format($expense->amount, 2) }}</strong></td>
-                                                @can('manageCredits', \App\User::class)
+                                                @can('manageCredits', \App\Models\User::class)
                                                     <td class="text-center align-middle">
                                                         {{ Form::open(['url' => 'cuentas/gastos/'.$expense->id, 'method' => 'delete', 'id'=>'formelim-'.$expense->id]) }}
                                                             <button type="button" data-description="{{ $expense->description }}"
@@ -97,7 +97,7 @@
                                         <th>Descripción</th>
                                         <th>Cargado por:</th>
                                         <th class="text-right">Monto</th>
-                                        @can('manageCredits', \App\User::class)
+                                        @can('manageCredits', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>

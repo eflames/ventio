@@ -33,7 +33,7 @@
                    data-tooltip="tooltip" data-placement="left" title="Este item es un regalo" class="btn btn-outline-pink btn-sm">
                     <span class="fa fa-gift"></span>
                 </a>
-                @can('discount', \App\User::class)
+                @can('discount', \App\Models\User::class)
                     <a href="#" data-item_id="{{ $detail->id }}"
                        data-item_name="{{ $detail->product->name }}"
                        data-item_price="{{ $detail->price }}"

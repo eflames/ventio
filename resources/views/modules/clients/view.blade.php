@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('clients.list') }}">Clientes registrados</a></li>
                         <li class="breadcrumb-item">Detalle de <strong>{{ $client->name }}</strong>
-                            @can('manageClients', \App\User::class)
+                            @can('manageClients', \App\Models\User::class)
                                 <a href="{{route('clients.edit', $client->id) }}" class="text-primary"> <span class="fa fa-pencil"></span> Editar</a>
                             @endcan
                         </li>

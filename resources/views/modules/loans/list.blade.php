@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        @can('manageCredits', \App\User::class)
+        @can('manageCredits', \App\Models\User::class)
             <div class="content-header-right col-md-6 col-12">
                 <div class="media width-400 float-right">
                     <div class="media-body media-right text-right">

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ConfigRequest;
 use App\Http\Requests\SetLogoRequest;
 use App\Models\Config;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\SEO;
 use App\Libraries\ImageUtil;

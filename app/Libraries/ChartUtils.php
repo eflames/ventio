@@ -27,12 +27,12 @@ class ChartUtils
         setlocale(LC_TIME, 'es_ES');
         Carbon::setLocale('es');
         $chartData = [];
-        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(5)->format('F');
-        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(4)->format('F');
-        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(3)->format('F');
-        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(2)->format('F');
-        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth()->format('F');
-        $chartData[0][] = Carbon::now()->startOfMonth()->format('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(5)->translatedFormat('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(4)->translatedFormat('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(3)->translatedFormat('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth(2)->translatedFormat('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->subMonth()->translatedFormat('F');
+        $chartData[0][] = Carbon::now()->startOfMonth()->translatedFormat('F');
         $chartData[1][] = Sale::where('sale_status_id', 2)->whereBetween('updated_at', [Carbon::now()->startOfMonth()->subMonth(5)->toDateTimeString(), Carbon::now()->startOfMonth()->subMonth(4)->subSeconds(1)->toDateTimeString()])->sum('amount');
         $chartData[1][] = Sale::where('sale_status_id', 2)->whereBetween('updated_at', [Carbon::now()->startOfMonth()->subMonth(4)->toDateTimeString(), Carbon::now()->startOfMonth()->subMonth(3)->subSeconds(1)->toDateTimeString()])->sum('amount');
         $chartData[1][] = Sale::where('sale_status_id', 2)->whereBetween('updated_at', [Carbon::now()->startOfMonth()->subMonth(3)->toDateTimeString(), Carbon::now()->startOfMonth()->subMonth(2)->subSeconds(1)->toDateTimeString()])->sum('amount');

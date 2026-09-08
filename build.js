@@ -1,17 +1,17 @@
-const mix = require('laravel-mix');
+#!/usr/bin/env node
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
+/**
+ * Build de assets de Ventio.
+ *
+ * Concatena los bundles de CSS/JS (ficheros ya minificados de vendors)
+ * en el mismo orden en que lo hacía Laravel Mix (webpack.mix.js), con
+ * la ventaja de no necesitar webpack para ello.
  */
 
-mix.styles([
+const fs = require('fs');
+const path = require('path');
+
+const styles = [
     'resources/css/bootstrap.min.css',
     'resources/css/vendors.min.css',
     'resources/css/toastr.min.css',
@@ -31,16 +31,15 @@ mix.styles([
     'resources/css/loading-btn.css',
     'resources/css/select2.min.css',
     'resources/css/utils.css',
-],'public/css/ventio-styles.css');
+];
 
-mix.styles([
+const icons = [
     'resources/css/fonts/feather.min.css',
     'resources/css/fonts/font-awesome.min.css',
     'resources/css/fonts/simpleline.min.css',
-],'public/css/ventio-icons.css');
+];
 
-
-mix.scripts([
+const scripts = [
     'resources/js/vendors.min.js',
     'resources/js/jquery.sticky.js',
     'resources/js/jquery.sparkline.min.js',
@@ -58,4 +57,31 @@ mix.scripts([
     'resources/js/init.js',
     'resources/js/saleAjaxFunctions.js',
     'resources/js/utils.js',
-],'public/js/ventio-scripts.js');
+];
+
+const bundles = [
+    { output: 'public/css/ventio-styles.css', files: styles },
+    { output: 'public/css/ventio-icons.css', files: icons },
+    { output: 'public/js/ventio-scripts.js', files: scripts },
+];
+
+function concat(output, files) {
+    const content = files
+        .map((file) => {
+            const resolved = path.resolve(__dirname, file);
+            if (!fs.existsSync(resolved)) {
+                console.error(`  ! Falta el fichero fuente: ${file}`);
+                return '';
+            }
+            return fs.readFileSync(resolved, 'utf8');
+        })
+        .join('\n');
+
+    fs.mkdirSync(path.dirname(path.resolve(__dirname, output)), { recursive: true });
+    fs.writeFileSync(path.resolve(__dirname, output), content + '\n');
+    console.log(`  ✓ ${output}`);
+}
+
+console.log('Compilando assets de Ventio...');
+bundles.forEach(({ output, files }) => concat(output, files));
+console.log('Listo.');

@@ -1,17 +1,18 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PaymentMethodsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        DB::table('payment_methods')->insert([
+        DB::table('payment_methods')->insertOrIgnore([
             ['name' => 'Crédito', 'identifier' => 'CRE', 'description' => 'Credito otorgado', 'created_by' => 1],
             ['name' => 'Deuda', 'identifier' => 'DED', 'description' => 'Deuda de cliente', 'created_by' => 1],
             ['name' => 'Efectivo', 'identifier' => 'CSH', 'description' => 'Pagos en el negocio en efectivo', 'created_by' => 1],

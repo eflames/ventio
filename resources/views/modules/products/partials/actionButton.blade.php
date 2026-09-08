@@ -14,7 +14,7 @@
                 data-tooltip="tooltip" data-placement="left" title="ver descripción">
             <span class="fa fa-eye"></span>
         </button>
-        @can('manageInventory', \App\User::class)
+        @can('manageInventory', \App\Models\User::class)
             <a href="{{route('products.edit', $product->id) }}" data-tooltip="tooltip"
                data-placement="top" title="Editar" class="btn btn-blue btn-sm">
                 <span class="fa fa-pencil"></span>

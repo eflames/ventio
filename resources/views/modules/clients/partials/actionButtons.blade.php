@@ -4,7 +4,7 @@
    data-placement="left" title="Ver detalles del cliente" class="btn btn-light btn-sm">
     <span class="fa fa-eye"></span>
 </a>
-@can('manageClients', \App\User::class)
+@can('manageClients', \App\Models\User::class)
     <a href="{{route('clients.edit', $client->id) }}" data-tooltip="tooltip"
        data-placement="top" title="Editar" class="btn btn-blue btn-sm">
         <span class="fa fa-pencil"></span>

@@ -34,7 +34,7 @@
             <div class="media width-400 float-right">
                 <div class="media-body media-right text-right">
                     <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                        @can('manageInventory', \App\User::class)
+                        @can('manageInventory', \App\Models\User::class)
                             <a href="#" data-tooltip="tooltip" data-placement="left" title="Cargar en lote"
                                class="btn btn-light-green btn-lg"  data-toggle="modal" data-target="#importModal">
                                 <span class="fa fa-upload"></span>
@@ -46,7 +46,7 @@
                                 <span class="fa fa-list-alt"></span>
                             </a>
                         @endcan
-                        @can('listInventory', \App\User::class)
+                        @can('listInventory', \App\Models\User::class)
                             <a href="{{ route('stock.report') }}" class="btn btn-green btn-lg btn-darken-3" data-tooltip="tooltip" data-placement="top" title="Descargar lista">
                                 <span class="fa fa-download"></span>
                             </a>
@@ -87,7 +87,7 @@
                                         <th class="text-center">Almacén</th>
                                         <th class="text-center">Precio venta</th>
                                         <th class="text-center">Precio costo</th>
-                                        @can('manageInventory', \App\User::class)
+                                        @can('manageInventory', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>
@@ -107,7 +107,7 @@
                                             <td class="text-center align-middle">{{ strtoupper($item->warehouse->name) }}</td>
                                             <td class="text-center align-middle">${{ number_format($item->price, 2) }}</td>
                                             <td class="text-center align-middle">${{ number_format($item->cost_price, 2) }}</td>
-                                            @can('manageInventory', \App\User::class)
+                                            @can('manageInventory', \App\Models\User::class)
                                                 <td class="text-center align-middle">
                                                     {{ Form::open(['url' => 'stock/'.$item->id, 'method' => 'delete', 'id'=>'formelim-'.$item->id]) }}
                                                     <div class="btn-group btn-group-sm">
@@ -175,7 +175,7 @@
                                         <th class="text-center">Almacén</th>
                                         <th class="text-center">Precio</th>
                                         <th class="text-center">Precio costo</th>
-                                        @can('manageInventory', \App\User::class)
+                                        @can('manageInventory', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>

@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        @can('manageInventory', \App\User::class)
+        @can('manageInventory', \App\Models\User::class)
             <div class="content-header-right col-md-6 col-12">
                 <div class="media width-400 float-right">
                     <div class="media-body media-right text-right">
@@ -58,7 +58,7 @@
                                         <th>Identificador</th>
                                         <th>Nombre</th>
                                         <th>Categoría</th>
-                                        @can('manageInventory', \App\User::class)
+                                        @can('manageInventory', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>
@@ -78,7 +78,7 @@
                                                             data-tooltip="tooltip" data-placement="left" title="ver descripción">
                                                         <span class="fa fa-exclamation-triangle"></span>
                                                     </button>
-                                                    @can('manageInventory', \App\User::class)
+                                                    @can('manageInventory', \App\Models\User::class)
                                                     <a href="{{route('products.edit', ['id' => $product->id]) }}" data-tooltip="tooltip"
                                                        data-placement="top" title="Editar" class="btn btn-blue btn-sm">
                                                         <span class="fa fa-pencil"></span>
@@ -104,7 +104,7 @@
                                         <th>Identificador</th>
                                         <th>Nombre</th>
                                         <th>Categoría</th>
-                                        @can('manageInventory', \App\User::class)
+                                        @can('manageInventory', \App\Models\User::class)
                                             <th class="text-center">Acciones</th>
                                         @endcan
                                     </tr>

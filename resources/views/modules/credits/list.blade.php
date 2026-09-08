@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        @can('manageCredits', \App\User::class)
+        @can('manageCredits', \App\Models\User::class)
             <div class="content-header-right col-md-6 col-12">
                 <div class="media width-250 float-right">
                     <div class="media-body media-right text-right">
@@ -97,7 +97,7 @@
                                                         <span class="fa fa-eye"></span>
                                                     </button>
                                                 @endif
-                                                @can('manageCredits', \App\User::class)
+                                                @can('manageCredits', \App\Models\User::class)
                                                     @if(!$credit->claimed)
                                                         <button type="button" class="btn btn-success btn-sm"
                                                                 data-tooltip="tooltip" data-placement="top" title="Registrar pago completo o parcial"

@@ -9,7 +9,7 @@
 <head>
     <title>Página no encontrada</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/googlefonts.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/ventio-styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/ventio-styles.css') }}">
     <style>
         .align-items-center {
             -ms-flex-align: center!important;
