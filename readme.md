@@ -10,7 +10,7 @@
 
 # ⚠️ Ventio is no longer being maintained and its code has been released
 
-Ventio is an inventory and sales manager created by me, developed with high security standards, a highly polished, fast and intuitive user interface.
+Ventio is an inventory and sales manager I created, built to high security standards, with a polished, fast, and intuitive user interface.
 
 Ventio features:
 
@@ -27,7 +27,7 @@ Ventio is based on Laravel Framework and is part of the Grupo Tera products (My 
 
 **About Ventio name:** Vent is for VENTAS and INVENTARIO words (spanish) and IO is for Input Output... Yikes!! smart AF!
 
-More info in my website: https://www.ernestoflames.com
+More info in my website: https://www.isdose.com
 
 ## Some screenshots
 
